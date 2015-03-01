@@ -53,11 +53,35 @@ void Dictionary::check( const char *filename ) {
 	cout << " Total cycles: " << cycles << endl;
 }
 
-int main(int argc, char **argv) {
-	if ( argc != 3 ) {
-		cerr << "Usage: spellCheck dictionaryFile inputFile" << endl;
-		exit(0);
+// aa
+vector<string> split(string input) {
+	int len = input.size();
+	int quadtrant = len / 4;
+
+	if (len < 4) {
+		vector<string> output = {input, "", "", ""};
+		return output;
 	}
-	Dictionary d(argv[1]);
-	d.check(argv[2]);
+
+	string str1 = input.substr(quadtrant*0, quadtrant);
+	string str2 = input.substr(quadtrant*1, quadtrant);
+	string str3 = input.substr(quadtrant*2, quadtrant);
+	string str4 = input.substr(quadtrant*3, len);
+
+	vector<string> output = {str1, str2, str3, str4};
+
+	return output;
+}
+
+int main(int argc, char **argv) {
+	// if ( argc != 3 ) {
+	// 	cerr << "Usage: spellCheck dictionaryFile inputFile" << endl;
+	// 	exit(0);
+	// }
+	// Dictionary d(argv[1]);
+	// d.check(argv[2]);
+	vector<string> test = split("pneumonoultramicroscopicsilicovolcanoconiosis");
+	for (auto item : test) {
+		cout << item << endl;
+	}
 }
