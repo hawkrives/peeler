@@ -53,10 +53,9 @@ void Dictionary::check( const char *filename ) {
 	cout << " Total cycles: " << cycles << endl;
 }
 
-// aa
 vector<string> split(string input) {
-	int len = input.size();
-	int quadtrant = len / 4;
+	size_t len = input.size();
+	size_t quadtrant = len / 4;
 
 	if (len < 4) {
 		vector<string> output = {input, "", "", ""};
@@ -73,6 +72,29 @@ vector<string> split(string input) {
 	return output;
 }
 
+size_t sum_vector(vector<string> words) {
+	size_t sum = 0;
+	for (string word : words) {
+		for (char ch : word) {
+			sum += ch;
+		}
+	}
+	return sum;
+}
+
+template<typename T>
+ostream& operator<< (ostream& out, const vector<T>& v) {
+	out << "[";
+	size_t last = v.size() - 1;
+	for(size_t i = 0; i < v.size(); ++i) {
+		out << v[i];
+		if (i != last)
+			out << ", ";
+	}
+	out << "]";
+	return out;
+}
+
 int main(int argc, char **argv) {
 	// if ( argc != 3 ) {
 	// 	cerr << "Usage: spellCheck dictionaryFile inputFile" << endl;
@@ -80,8 +102,16 @@ int main(int argc, char **argv) {
 	// }
 	// Dictionary d(argv[1]);
 	// d.check(argv[2]);
+
 	vector<string> test = split("pneumonoultramicroscopicsilicovolcanoconiosis");
-	for (auto item : test) {
-		cout << item << endl;
-	}
+	cout << test << endl;
+
+	vector<string> test2 = split("aa");
+	cout << test2 << endl;
+
+	size_t hash = sum_vector(test);
+	cout << hash << endl;
+
+	size_t hash2 = sum_vector(test2);
+	cout << hash2 << endl;
 }
