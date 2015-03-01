@@ -53,7 +53,7 @@ void Dictionary::check( const char *filename ) {
 	cout << " Total cycles: " << cycles << endl;
 }
 
-vector<string> split(string input) {
+vector<string> quadrize(string input) {
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
 
@@ -103,10 +103,10 @@ int main(int argc, char **argv) {
 	// Dictionary d(argv[1]);
 	// d.check(argv[2]);
 
-	vector<string> test = split("pneumonoultramicroscopicsilicovolcanoconiosis");
+	vector<string> test = quadrize("pneumonoultramicroscopicsilicovolcanoconiosis");
 	cout << test << endl;
 
-	vector<string> test2 = split("aa");
+	vector<string> test2 = quadrize("aa");
 	cout << test2 << endl;
 
 	size_t hash = sum_vector(test);
