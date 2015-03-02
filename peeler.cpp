@@ -3,39 +3,9 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <array>
 using namespace std;
 #include "elapsed_time.h"
-
-vector<string> quadrize(string input) {
-	size_t len = input.size();
-	size_t quadtrant = len / 4;
-
-	if (len < 4) {
-		vector<string> output = {input, "", "", ""};
-		return output;
-	}
-
-	string str1 = input.substr(quadtrant*0, quadtrant);
-	string str2 = input.substr(quadtrant*1, quadtrant);
-	string str3 = input.substr(quadtrant*2, quadtrant);
-	string str4 = input.substr(quadtrant*3, len);
-
-	vector<string> output = {str1, str2, str3, str4};
-
-	return output;
-}
-
-vector<int> strs_to_ascii(vector<string> words) {
-	vector<int> asciiified;
-	for (string word : words) {
-		size_t sum = 0;
-		for (char ch : word) {
-			sum += ch;
-		}
-		asciiified.push_back(sum);
-	}
-	return asciiified;
-}
 
 template<typename T>
 ostream& operator<< (ostream& out, const vector<T>& v) {
@@ -57,27 +27,45 @@ vector<int> seed(size_t max) {
 
 int sum(vector<int> vals) {
 	int sum = 0;
-	for (int item : vals) {
-		sum += item;
+	size_t size = vals.size();
+	for (size_t i = 0; i < size; i++) {
+		sum += vals[i];
 	}
 	return sum;
 }
 
-size_t hash_vector(vector<int> vec) {
-	int m = *max_element(vec.begin(), vec.end());
-	vector<int> seeds = seed(m);
-
-	vector<int> hashed;
-	for (int i = 0; i < vec.size(); i++) {
-		hashed.push_back(vec.at(i) * seeds.at(i));
+int asciiify(string input) {
+	size_t ascii = 0;
+	for (char ch : input) {
+		ascii += ch;
 	}
-	int hash_sum = sum(hashed);
-
-	return hash_sum % m;
+	return ascii;
 }
 
-size_t hash_string(string s) {
-  return hash_vector(strs_to_ascii(quadrize(s)));
+int hash_string(string input) {
+	size_t len = input.size();
+	size_t quadtrant = len / 4;
+
+	if (len < 4) {
+		return asciiify(input);
+	}
+
+	string str1 = input.substr(quadtrant*0, quadtrant);
+	string str2 = input.substr(quadtrant*1, quadtrant);
+	string str3 = input.substr(quadtrant*2, quadtrant);
+	string str4 = input.substr(quadtrant*3, len);
+
+	int m = 500009;
+	array<int, 4> seeds = {216, 0, 9, 111};
+
+	int hash1 = asciiify(str1) * seeds[0];
+	int hash2 = asciiify(str2) * seeds[1];
+	int hash3 = asciiify(str3) * seeds[2];
+	int hash4 = asciiify(str4) * seeds[3];
+
+	int hash_sum = hash1 + hash2 + hash3 + hash4;
+
+	return hash_sum % m;
 }
 
 struct Dictionary {
