@@ -36,7 +36,7 @@ ostream& operator<< (ostream& out, const pair<int, vector<string> >& p) {
 	return out;
 }
 ostream& operator<< (ostream& out, const pair<int, int >& p) {
-	out << p.first << " -> " << p.second;
+	out << p.second << "\t" << p.first;
 	return out;
 }
 template<typename T>
@@ -61,7 +61,7 @@ void make_random() {
 	seeds[1] = (rand() / (1.0 + RAND_MAX)) * max + min;
 	seeds[2] = (rand() / (1.0 + RAND_MAX)) * max + min;
 	seeds[3] = (rand() / (1.0 + RAND_MAX)) * max + min;
-	// cout << seeds << endl;
+	// cerr << seeds << endl;
 	// std::generate(seeds.begin(), seeds.end(), [min, max]{ return (rand() / (1.0 + RAND_MAX)) * max + min; });
 }
 
@@ -127,7 +127,7 @@ void getWords(const char *filename, vector<string> &vec, unordered_map<int, vect
 		exit(-1);
 	}
 	string s;
-	cout << "reading/hashing file" << endl;
+	cerr << "reading/hashing file" << endl;
 	while ( f >> s ) {
 		vec.push_back(s);
 		int hash = hash_string(s);
@@ -139,7 +139,7 @@ void getWords(const char *filename, vector<string> &vec, unordered_map<int, vect
 			m.insert(make_pair(hash, strings));
 		}
 	}
-	cout << "done with file; " << m.size() << endl;
+	cerr << "done with file; " << m.size() << endl;
 	map<int, int> sizes;
 	for (auto pair : m) {
 		sizes.insert(make_pair(pair.first, pair.second.size()));
@@ -155,11 +155,11 @@ void getWords(const char *filename, vector<string> &vec) {
 		exit(-1);
 	}
 	string s;
-	cout << "reading/hashing file" << endl;
+	cerr << "reading/hashing file" << endl;
 	while ( f >> s ) {
 		vec.push_back(s);
 	}
-	cout << "done with file" << endl;
+	cerr << "done with file" << endl;
 }
 
 Dictionary::Dictionary( const char *filename ) {
@@ -183,7 +183,7 @@ void Dictionary::check( const char *filename ) {
 	vector<string> query;
 	getWords(filename, query);
 
-	cout << "checking " << filename << endl;
+	cerr << "checking " << filename << endl;
 	start_timer();  // from elapsed_time.h
 
 	int counter = 0, n = query.size();
@@ -192,10 +192,10 @@ void Dictionary::check( const char *filename ) {
 			++counter;
 		}
 	}
-	cout << "Misspelled " << counter << " words." << endl;
+	cerr << "Misspelled " << counter << " words." << endl;
 
 	double cycles = elapsed_time();
-	cout << " Total cycles: " << cycles << endl;
+	cerr << " Total cycles: " << cycles << endl;
 }
 
 int main(int argc, char **argv) {
