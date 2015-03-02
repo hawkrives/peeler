@@ -179,10 +179,10 @@ int main(int argc, char **argv) {
 	size_t hash = hash_vector(summed);
 	cout << hash << endl;
 
-  cout << hash_string("pneumonoultramicroscopicsilicovolcanoconiosis") << endl;
+	cout << hash_string("pneumonoultramicroscopicsilicovolcanoconiosis") << endl;
 
 	size_t hash2 = hash_vector(summed2);
 	cout << hash2 << endl;
 
-  cout << hash_string("aa") << endl;
+	cout << hash_string("aa") << endl;
 }
