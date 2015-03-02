@@ -61,8 +61,6 @@ void make_random() {
 	seeds[1] = (rand() / (1.0 + RAND_MAX)) * max + min;
 	seeds[2] = (rand() / (1.0 + RAND_MAX)) * max + min;
 	seeds[3] = (rand() / (1.0 + RAND_MAX)) * max + min;
-	// cerr << seeds << endl;
-	// std::generate(seeds.begin(), seeds.end(), [min, max]{ return (rand() / (1.0 + RAND_MAX)) * max + min; });
 }
 
 vector<int> seed(size_t max) {
@@ -91,9 +89,8 @@ int hash_string(string input) {
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
 
-	if (len < 4) {
+	if (len < 4)
 		return asciiify(input);
-	}
 
 	string str1 = input.substr(quadtrant*0, quadtrant);
 	string str2 = input.substr(quadtrant*1, quadtrant);
@@ -123,7 +120,7 @@ struct Dictionary {
 void getWords(const char *filename, vector<string> &vec, unordered_map<int, vector<string> > &m) {
 	ifstream f(filename);
 	if ( !f.good() ) {
-		cerr << "Error:  unable to open " << filename << endl;
+		cerr << "Error: unable to open " << filename << endl;
 		exit(-1);
 	}
 	string s;
@@ -195,7 +192,7 @@ void Dictionary::check( const char *filename ) {
 	cerr << "Misspelled " << counter << " words." << endl;
 
 	double cycles = elapsed_time();
-	cerr << " Total cycles: " << cycles << endl;
+	cerr << "Total cycles: " << cycles << endl;
 }
 
 int main(int argc, char **argv) {
