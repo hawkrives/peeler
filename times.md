@@ -35,3 +35,10 @@ C++, unordered_multimap
 Misspelled 5823 words.
 Total cycles: 1.21867e+09
 168.71 real       167.43 user         0.56 sys
+
+
+C++, optimized (map, fewer vectors)
+===================================
+Misspelled 5823 words.
+Total cycles: 1.20101e+09
+1.48 real         1.44 user         0.03 sys
