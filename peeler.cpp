@@ -173,10 +173,10 @@ bool Dictionary::inWordArray(string &s) {
 		vector<string> possibilities = hashTable.at(hash);
 		for (string str : possibilities)
 			if (str == s)
-				return true;
+				return 1;
 	} catch (...) {}
 
-	return false;
+	return 0;
 }
 
 void Dictionary::check( const char *filename ) {
@@ -187,15 +187,21 @@ void Dictionary::check( const char *filename ) {
 	start_timer();  // from elapsed_time.h
 
 	int counter = 0, n = query.size();
+  bool in_array;
+  double cycles;
 	for ( int i = 0; i < n; ++i ) {
-		if ( !inWordArray(query[i]) ) {
+    start_timer();
+    in_array = inWordArray(query[i]);
+    cycles = elapsed_time();
+		if ( !in_array ) {
 			++counter;
 		}
+    cout << (in_array ? 1 : 0) << "\t" << cycles << endl;
 	}
 	cerr << "Misspelled " << counter << " words." << endl;
 
-	double cycles = elapsed_time();
-	cerr << " Total cycles: " << cycles << endl;
+//	cycles = elapsed_time();
+//	cerr << " Total cycles: " << cycles << endl;
 }
 
 int main(int argc, char **argv) {
