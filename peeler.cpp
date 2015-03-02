@@ -82,7 +82,7 @@ size_t hash_string(string s) {
 
 struct Dictionary {
 	vector<string> wordArray;   // store the data
-	unordered_map<int, vector<string> > hashTable;
+	unordered_multimap<int, string> hashTable;
 
 	Dictionary(const char *filename);  // constructor
 
@@ -90,24 +90,27 @@ struct Dictionary {
 	void check(const char *filename);  // multiple queries
 };
 
-void getWords(const char *filename, vector<string> &vec, unordered_map<int, vector<string> > &map) {
+void getWords(const char *filename, vector<string> &vec, unordered_multimap<int, string> &map) {
 	ifstream f(filename);
 	if ( ! f.good() ) {
 		cerr << "Error:  unable to open " << filename << endl;
 		exit(-1);
 	}
 	string s;
+	cout << "reading/hashing file" << endl;
 	while ( f >> s ) {
-		vec.push_back(s);
+		// vec.push_back(s);
 		int hash = hash_string(s);
-		try {
-			vector<string> &current = map.at(hash);
-			current.push_back(s);
-		} catch (...) {
-			vector<string> strings = {s};
-			map.insert(make_pair(hash, strings));
-		}
+		map.insert(make_pair(hash, s));
+		// try {
+		// 	vector<string> &current = map.at(hash);
+		// 	current.push_back(s);
+		// } catch (...) {
+		// 	vector<string> strings = {s};
+		// 	map.insert(make_pair(hash, strings));
+		// }
 	}
+	cout << "done with file" << endl;
 }
 
 Dictionary::Dictionary( const char *filename ) {
@@ -117,12 +120,14 @@ Dictionary::Dictionary( const char *filename ) {
 bool Dictionary::inWordArray(string &s) {
 	int hash = hash_string(s);
 
-	try {
-		vector<string> possibilities = hashTable.at(hash);
-		for (string str : possibilities)
-			if (str == s)
-				return true;
-	} catch (...) {}
+	// try {
+	auto range = hashTable.equal_range(hash);
+	for (auto it = range.first; it != range.second; ++it) {
+		if (s == it->second) {
+			return true;
+		}
+	}
+	// } catch (...) {}
 
 	return false;
 
@@ -138,9 +143,10 @@ bool Dictionary::inWordArray(string &s) {
 
 void Dictionary::check( const char *filename ) {
 	vector<string> query;
-	unordered_map<int, vector<string> > queryHash;
+	unordered_multimap<int, string> queryHash;
 	getWords(filename, query, queryHash);
 
+	cout << "checking" << endl;
 	start_timer();  // from elapsed_time.h
 
 	int counter = 0, n = query.size();
