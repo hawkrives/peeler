@@ -6,6 +6,9 @@ peeler: peeler.cpp elapsed_time.h
 peeler-spreads: peeler-spreads.cpp elapsed_time.h
 	g++ --std=c++11 peeler-spreads.cpp -o peeler-spreads
 
+peeler-avg: peeler-avg.cpp elapsed_time.h
+	g++ --std=c++11 peeler-avg.cpp -o peeler-avg
+
 peeler-optim: peeler.cpp elapsed_time.h
 	g++ -O9 --std=c++11 peeler.cpp -o peeler-o
 
@@ -36,9 +39,13 @@ run-py:
 	python3 ./peeler.py
 
 spread.txt: peeler-spreads
-	./peeler-spreads words moby
+	./peeler-spreads words moby | sort -n
 
-data: spread.txt
+averages.txt: peeler-avg
+	./peeler-avg words moby > avgs.txt
+	awk -f ./average.awk < avgs.txt
+
+data: spread.txt averages.txt
 
 
 %PHONY: clean js
