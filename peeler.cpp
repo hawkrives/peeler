@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <map>
 #include <array>
 #include <cstdlib>
 using namespace std;
@@ -18,6 +19,24 @@ ostream& operator<< (ostream& out, const vector<T>& v) {
 			out << ", ";
 	}
 	out << "]";
+	return out;
+}
+ostream& operator<< (ostream& out, const pair<int, vector<string> >& p) {
+	int hash = p.first;
+	vector<string> v = p.second;
+	out << hash << " -> ";
+	out << "[";
+	size_t last = v.size() - 1;
+	for(size_t i = 0; i < v.size(); ++i) {
+		out << v[i];
+		if (i != last)
+			out << ", ";
+	}
+	out << "]";
+	return out;
+}
+ostream& operator<< (ostream& out, const pair<int, int >& p) {
+	out << p.first << " -> " << p.second;
 	return out;
 }
 template<typename T>
@@ -101,7 +120,7 @@ struct Dictionary {
 	void check(const char *filename);  // multiple queries
 };
 
-void getWords(const char *filename, vector<string> &vec, unordered_map<int, vector<string> > &map) {
+void getWords(const char *filename, vector<string> &vec, unordered_map<int, vector<string> > &m) {
 	ifstream f(filename);
 	if ( !f.good() ) {
 		cerr << "Error:  unable to open " << filename << endl;
@@ -113,14 +132,20 @@ void getWords(const char *filename, vector<string> &vec, unordered_map<int, vect
 		vec.push_back(s);
 		int hash = hash_string(s);
 		try {
-			vector<string> &current = map.at(hash);
+			vector<string> &current = m.at(hash);
 			current.push_back(s);
 		} catch (...) {
 			vector<string> strings = {s};
-			map.insert(make_pair(hash, strings));
+			m.insert(make_pair(hash, strings));
 		}
 	}
-	cout << "done with file" << endl;
+	cout << "done with file; " << m.size() << endl;
+	map<int, int> sizes;
+	for (auto pair : m) {
+		sizes.insert(make_pair(pair.first, pair.second.size()));
+	}
+	for (auto item : sizes)
+		cout << item << endl;
 }
 
 void getWords(const char *filename, vector<string> &vec) {
