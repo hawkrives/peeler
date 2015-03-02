@@ -187,16 +187,16 @@ void Dictionary::check( const char *filename ) {
 	start_timer();  // from elapsed_time.h
 
 	int counter = 0, n = query.size();
-  bool in_array;
-  double cycles;
+	bool in_array;
+	double cycles;
 	for ( int i = 0; i < n; ++i ) {
-    start_timer();
-    in_array = inWordArray(query[i]);
-    cycles = elapsed_time();
+		start_timer();
+		in_array = inWordArray(query[i]);
+		cycles = elapsed_time();
 		if ( !in_array ) {
 			++counter;
 		}
-    cout << (in_array ? 1 : 0) << "\t" << cycles << endl;
+		cout << (in_array ? 1 : 0) << "\t" << cycles << endl;
 	}
 	cerr << "Misspelled " << counter << " words." << endl;
 
