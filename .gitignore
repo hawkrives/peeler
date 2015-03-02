@@ -1,4 +1,6 @@
 peeler
+peeler-*
+peeler.js
 .DS_Store
 node_modules
 out*
