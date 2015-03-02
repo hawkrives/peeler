@@ -1,0 +1,15 @@
+{
+  "name": "peeler",
+  "version": "0.0.1",
+  "description": "A spell checker",
+  "main": "peeler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@stogit.cs.stolaf.edu:rives/peeler.git"
+  },
+  "author": "Hawken Rives, Matthew Johnson",
+  "license": "ISC"
+}
