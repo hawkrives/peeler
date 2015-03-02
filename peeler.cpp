@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <array>
+#include <cstdlib>
 using namespace std;
 #include "elapsed_time.h"
 
@@ -18,6 +19,31 @@ ostream& operator<< (ostream& out, const vector<T>& v) {
 	}
 	out << "]";
 	return out;
+}
+template<typename T>
+ostream& operator<< (ostream& out, const array<T, 4>& v) {
+	out << "[";
+	size_t last = v.size() - 1;
+	for(size_t i = 0; i < v.size(); ++i) {
+		out << v[i];
+		if (i != last)
+			out << ", ";
+	}
+	out << "]";
+	return out;
+}
+
+int nextPrime = 500009;
+array<int, 4> seeds;
+void make_random() {
+	int min = 0;
+	int max = nextPrime;
+	seeds[0] = (rand() / (1.0 + RAND_MAX)) * max + min;
+	seeds[1] = (rand() / (1.0 + RAND_MAX)) * max + min;
+	seeds[2] = (rand() / (1.0 + RAND_MAX)) * max + min;
+	seeds[3] = (rand() / (1.0 + RAND_MAX)) * max + min;
+	// cout << seeds << endl;
+	// std::generate(seeds.begin(), seeds.end(), [min, max]{ return (rand() / (1.0 + RAND_MAX)) * max + min; });
 }
 
 vector<int> seed(size_t max) {
@@ -55,9 +81,6 @@ int hash_string(string input) {
 	string str3 = input.substr(quadtrant*2, quadtrant);
 	string str4 = input.substr(quadtrant*3, len);
 
-	int m = 500009;
-	array<int, 4> seeds = {216, 0, 9, 111};
-
 	int hash1 = asciiify(str1) * seeds[0];
 	int hash2 = asciiify(str2) * seeds[1];
 	int hash3 = asciiify(str3) * seeds[2];
@@ -65,7 +88,7 @@ int hash_string(string input) {
 
 	int hash_sum = hash1 + hash2 + hash3 + hash4;
 
-	return hash_sum % m;
+	return hash_sum % nextPrime;
 }
 
 struct Dictionary {
@@ -80,7 +103,7 @@ struct Dictionary {
 
 void getWords(const char *filename, vector<string> &vec, unordered_map<int, vector<string> > &map) {
 	ifstream f(filename);
-	if ( ! f.good() ) {
+	if ( !f.good() ) {
 		cerr << "Error:  unable to open " << filename << endl;
 		exit(-1);
 	}
@@ -135,7 +158,7 @@ void Dictionary::check( const char *filename ) {
 	vector<string> query;
 	getWords(filename, query);
 
-	cout << "checking" << endl;
+	cout << "checking " << filename << endl;
 	start_timer();  // from elapsed_time.h
 
 	int counter = 0, n = query.size();
@@ -155,6 +178,8 @@ int main(int argc, char **argv) {
 		cerr << "Usage: spellCheck dictionaryFile inputFile" << endl;
 		exit(0);
 	}
+	// make_random();
+	seeds = {216, 0, 9, 111};
 	Dictionary d(argv[1]);
 	d.check(argv[2]);
 }
