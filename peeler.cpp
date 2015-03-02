@@ -124,6 +124,10 @@ size_t hash_vector(vector<int> vec) {
 	return hash_sum % m;
 }
 
+size_t hash_string(string s) {
+  return hash_vector(strs_to_ascii(quadrize(s)));
+}
+
 int main(int argc, char **argv) {
 	// if ( argc != 3 ) {
 	// 	cerr << "Usage: spellCheck dictionaryFile inputFile" << endl;
@@ -147,6 +151,10 @@ int main(int argc, char **argv) {
 	size_t hash = hash_vector(summed);
 	cout << hash << endl;
 
+  cout << hash_string("pneumonoultramicroscopicsilicovolcanoconiosis") << endl;
+
 	size_t hash2 = hash_vector(summed2);
 	cout << hash2 << endl;
+
+  cout << hash_string("aa") << endl;
 }
