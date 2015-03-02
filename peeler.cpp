@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 #include "elapsed_time.h"
 
@@ -72,14 +73,16 @@ vector<string> quadrize(string input) {
 	return output;
 }
 
-size_t sum_vector(vector<string> words) {
-	size_t sum = 0;
+vector<int> strs_to_ascii(vector<string> words) {
+	vector<int> asciiified;
 	for (string word : words) {
+		size_t sum = 0;
 		for (char ch : word) {
 			sum += ch;
 		}
+		asciiified.push_back(sum);
 	}
-	return sum;
+	return asciiified;
 }
 
 template<typename T>
@@ -93,6 +96,32 @@ ostream& operator<< (ostream& out, const vector<T>& v) {
 	}
 	out << "]";
 	return out;
+}
+
+vector<int> seed(size_t max) {
+	vector<int> vals = {216, 0, 9, 111};
+	return vals;
+}
+
+int sum(vector<int> vals) {
+	int sum = 0;
+	for (int item : vals) {
+		sum += item;
+	}
+	return sum;
+}
+
+size_t hash_vector(vector<int> vec) {
+	int m = *max_element(vec.begin(), vec.end());
+	vector<int> seeds = seed(m);
+
+	vector<int> hashed;
+	for (int i = 0; i < vec.size(); i++) {
+		hashed.push_back(vec.at(i) * seeds.at(i));
+	}
+	int hash_sum = sum(hashed);
+
+	return hash_sum % m;
 }
 
 int main(int argc, char **argv) {
@@ -109,9 +138,15 @@ int main(int argc, char **argv) {
 	vector<string> test2 = quadrize("aa");
 	cout << test2 << endl;
 
-	size_t hash = sum_vector(test);
+	vector<int> summed = strs_to_ascii(test);
+	cout << summed << endl;
+
+	vector<int> summed2 = strs_to_ascii(test2);
+	cout << summed2 << endl;
+
+	size_t hash = hash_vector(summed);
 	cout << hash << endl;
 
-	size_t hash2 = sum_vector(test2);
+	size_t hash2 = hash_vector(summed2);
 	cout << hash2 << endl;
 }
