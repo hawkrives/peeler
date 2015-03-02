@@ -28,3 +28,10 @@ C++, unordered_map
 Misspelled 5823 words.
 Total cycles: 9.27376e+07
 56.91 real        56.38 user         0.30 sys
+
+
+C++, unordered_multimap
+=======================
+Misspelled 5823 words.
+Total cycles: 1.21867e+09
+168.71 real       167.43 user         0.56 sys
