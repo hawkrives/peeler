@@ -99,7 +99,7 @@ void getWords(const char *filename, vector<string> &vec, unordered_multimap<int,
 	string s;
 	cout << "reading/hashing file" << endl;
 	while ( f >> s ) {
-		// vec.push_back(s);
+		vec.push_back(s);
 		int hash = hash_string(s);
 		map.insert(make_pair(hash, s));
 		// try {
@@ -170,25 +170,25 @@ int main(int argc, char **argv) {
 	Dictionary d(argv[1]);
 	d.check(argv[2]);
 
-	vector<string> test = quadrize("pneumonoultramicroscopicsilicovolcanoconiosis");
-	cout << test << endl;
+	// vector<string> test = quadrize("pneumonoultramicroscopicsilicovolcanoconiosis");
+	// cout << test << endl;
 
-	vector<string> test2 = quadrize("aa");
-	cout << test2 << endl;
+	// vector<string> test2 = quadrize("aa");
+	// cout << test2 << endl;
 
-	vector<int> summed = strs_to_ascii(test);
-	cout << summed << endl;
+	// vector<int> summed = strs_to_ascii(test);
+	// cout << summed << endl;
 
-	vector<int> summed2 = strs_to_ascii(test2);
-	cout << summed2 << endl;
+	// vector<int> summed2 = strs_to_ascii(test2);
+	// cout << summed2 << endl;
 
-	size_t hash = hash_vector(summed);
-	cout << hash << endl;
+	// size_t hash = hash_vector(summed);
+	// cout << hash << endl;
 
-	cout << hash_string("pneumonoultramicroscopicsilicovolcanoconiosis") << endl;
+	// cout << hash_string("pneumonoultramicroscopicsilicovolcanoconiosis") << endl;
 
-	size_t hash2 = hash_vector(summed2);
-	cout << hash2 << endl;
+	// size_t hash2 = hash_vector(summed2);
+	// cout << hash2 << endl;
 
-	cout << hash_string("aa") << endl;
+	// cout << hash_string("aa") << endl;
 }
