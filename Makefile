@@ -9,6 +9,9 @@ peeler-spreads: peeler-spreads.cpp elapsed_time.h
 peeler-avg: peeler-avg.cpp elapsed_time.h
 	g++ --std=c++11 peeler-avg.cpp -o peeler-avg
 
+peeler-multimap: peeler-multimap.cpp elapsed_time.h
+	g++ -O9 --std=c++11 peeler-multimap.cpp -o peeler-multimap
+
 peeler-optim: peeler.cpp elapsed_time.h
 	g++ -O9 --std=c++11 peeler.cpp -o peeler-o
 
@@ -31,6 +34,9 @@ run-cpp: peeler
 
 run-optim: peeler-optim
 	./peeler-o words moby
+
+run-multi: peeler-multimap
+	./peeler-multimap words moby
 
 run-js: peeler.js
 	node ./peeler.js

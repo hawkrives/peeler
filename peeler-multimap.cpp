@@ -89,9 +89,8 @@ int hash_string(string input) {
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
 
-	if (len < 4) {
+	if (len < 4)
 		return asciiify(input);
-	}
 
 	string str1 = input.substr(quadtrant*0, quadtrant);
 	string str2 = input.substr(quadtrant*1, quadtrant);
@@ -109,7 +108,8 @@ int hash_string(string input) {
 }
 
 struct Dictionary {
-	unordered_map<int, vector<string> > hashTable;
+	vector<string> wordArray;   // store the data
+	unordered_multimap<int, string> hashTable;
 
 	Dictionary(const char *filename);  // constructor
 
@@ -117,25 +117,33 @@ struct Dictionary {
 	void check(const char *filename);  // multiple queries
 };
 
-void getWords(const char *filename, unordered_map<int, vector<string> > &m) {
+void getWords(const char *filename, vector<string> &vec, unordered_multimap<int, string> &m) {
 	ifstream f(filename);
 	if ( !f.good() ) {
-		cerr << "Error:  unable to open " << filename << endl;
+		cerr << "Error: unable to open " << filename << endl;
 		exit(-1);
 	}
 	string s;
 	cerr << "reading/hashing file" << endl;
 	while ( f >> s ) {
+		vec.push_back(s);
 		int hash = hash_string(s);
-		try {
-			vector<string> &current = m.at(hash);
-			current.push_back(s);
-		} catch (...) {
-			vector<string> strings = {s};
-			m.insert(make_pair(hash, strings));
-		}
+		m.insert(make_pair(hash, s));
+		// try {
+		// 	vector<string> &current = m.at(hash);
+		// 	current.push_back(s);
+		// } catch (...) {
+		// 	vector<string> strings = {s};
+		// 	m.insert(make_pair(hash, strings));
+		// }
 	}
 	cerr << "done with file; " << m.size() << endl;
+	// map<int, int> sizes;
+	// for (auto pair : m) {
+	// 	sizes.insert(make_pair(pair.first, pair.second.size()));
+	// }
+	// for (auto item : sizes)
+	// 	cout << item << endl;
 }
 
 void getWords(const char *filename, vector<string> &vec) {
@@ -153,19 +161,23 @@ void getWords(const char *filename, vector<string> &vec) {
 }
 
 Dictionary::Dictionary( const char *filename ) {
-	getWords(filename, hashTable);
+	getWords(filename, wordArray, hashTable);
 }
 
 bool Dictionary::inWordArray(string &s) {
 	int hash = hash_string(s);
 
-	try {
-		vector<string> &possibilities = hashTable.at(hash);
-		int size = possibilities.size();
-		for (size_t i = 0; i < size; i++)
-			if (possibilities[i] == s)
-				return true;
-	} catch (...) {}
+	auto range = hashTable.equal_range(hash);
+	for (auto it = range.first; it != range.second; it++)
+		if (s == it->second)
+			return true;
+
+	// try {
+	// 	vector<string> possibilities = hashTable.at(hash);
+	// 	for (string str : possibilities)
+	// 		if (str == s)
+	// 			return true;
+	// } catch (...) {}
 
 	return false;
 }
