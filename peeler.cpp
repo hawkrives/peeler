@@ -2,11 +2,13 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 using namespace std;
 #include "elapsed_time.h"
 
 struct Dictionary {
 	vector<string> wordArray;   // store the data
+	unordered_map<int, vector<string> > hashTable;
 
 	Dictionary(const char *filename);  // constructor
 
@@ -14,36 +16,62 @@ struct Dictionary {
 	void check(const char *filename);  // multiple queries
 };
 
-void getWords( const char *filename, vector<string> &vec ) {
+void getWords(const char *filename, vector<string> &vec, unordered_map<int, vector<string> > &map) {
 	ifstream f(filename);
 	if ( ! f.good() ) {
 		cerr << "Error:  unable to open " << filename << endl;
 		exit(-1);
 	}
 	string s;
-	while ( f >> s ) vec.push_back(s);
+	while ( f >> s ) {
+		vec.push_back(s);
+		int hash = hash_string(s);
+		try {
+			vector<string> *current = map.at(hash);
+			current.push_back(s);
+		} catch (int e) {
+			vector<string> strings = {s};
+			map.insert(make_pair(hash, strings));
+		}
+	}
 }
 
 Dictionary::Dictionary( const char *filename ) {
-	getWords(filename, wordArray);
+	getWords(filename, wordArray, hashTable);
 }
 
 bool Dictionary::inWordArray(string &s) {
-	int n = wordArray.size();
-	for ( int i = 0; i < n; ++i )
-		if ( s == wordArray[i] ) return true;
+	int hash = hash_string(*s);
+
+	try {
+		vector<string> possibilities = hashTable.at(hash);
+		for (string str : possibilities)
+			if (str == *s)
+				return true;
+	} catch (int err) {}
+
 	return false;
+
+	// int n = wordArray.size();
+	// for ( int i = 0; i < n; ++i ) {
+	// 	if ( s == wordArray[i] ) {
+	// 		return true;
+	// 	}
+	// }
+	//
+	// return false;
 }
 
 void Dictionary::check( const char *filename ) {
 	vector<string> query;
-	getWords(filename, query);
+	unordered_map<int, vector<string> > queryHash;
+	getWords(filename, query, queryHash);
 
 	start_timer();  // from elapsed_time.h
 
 	int counter = 0, n = query.size();
 	for ( int i = 0; i < n; ++i ) {
-		if ( ! inWordArray(query[i]) ) {
+		if ( !inWordArray(query[i]) ) {
 			// cout << query[i] << " ";
 			++counter;
 		}
