@@ -1,5 +1,9 @@
-Number of buckets | Bucket size
+(h1 "peeler/buckets")
 
+(p "Our buckets, grouped first by the number of buckets of that size, and then by the number of items in that size of bucket.")
+(strong "Number of buckets | Bucket size")
+
+(pre "
    1 102
    1 115
    1 116
@@ -95,4 +99,4 @@ Number of buckets | Bucket size
 3090 4
 3606 3
 4258 2
-6611 1
+6611 1")
