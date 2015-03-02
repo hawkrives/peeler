@@ -129,15 +129,6 @@ bool Dictionary::inWordArray(string &s) {
 	} catch (...) {}
 
 	return false;
-
-	// int n = wordArray.size();
-	// for ( int i = 0; i < n; ++i ) {
-	// 	if ( s == wordArray[i] ) {
-	// 		return true;
-	// 	}
-	// }
-	//
-	// return false;
 }
 
 void Dictionary::check( const char *filename ) {
@@ -150,7 +141,6 @@ void Dictionary::check( const char *filename ) {
 	int counter = 0, n = query.size();
 	for ( int i = 0; i < n; ++i ) {
 		if ( !inWordArray(query[i]) ) {
-			// cout << query[i] << " ";
 			++counter;
 		}
 	}
@@ -167,26 +157,4 @@ int main(int argc, char **argv) {
 	}
 	Dictionary d(argv[1]);
 	d.check(argv[2]);
-
-	// vector<string> test = quadrize("pneumonoultramicroscopicsilicovolcanoconiosis");
-	// cout << test << endl;
-
-	// vector<string> test2 = quadrize("aa");
-	// cout << test2 << endl;
-
-	// vector<int> summed = strs_to_ascii(test);
-	// cout << summed << endl;
-
-	// vector<int> summed2 = strs_to_ascii(test2);
-	// cout << summed2 << endl;
-
-	// size_t hash = hash_vector(summed);
-	// cout << hash << endl;
-
-	// cout << hash_string("pneumonoultramicroscopicsilicovolcanoconiosis") << endl;
-
-	// size_t hash2 = hash_vector(summed2);
-	// cout << hash2 << endl;
-
-	// cout << hash_string("aa") << endl;
 }
