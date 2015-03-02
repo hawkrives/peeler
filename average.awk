@@ -1,4 +1,5 @@
 #!/bin/awk -f
+# input format: [01]\t[0-9]+ (miss or hit, tab, cycle count)
 
 BEGIN { \
   hit = 0; \
