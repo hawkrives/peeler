@@ -144,8 +144,8 @@ void getWords(const char *filename, vector<string> &vec, unordered_map<int, vect
 	for (auto pair : m) {
 		sizes.insert(make_pair(pair.first, pair.second.size()));
 	}
-	for (auto item : sizes)
-		cout << item << endl;
+	// for (auto item : sizes)
+	// 	cout << item << endl;
 }
 
 void getWords(const char *filename, vector<string> &vec) {
