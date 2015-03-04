@@ -7,7 +7,12 @@
 using namespace std;
 #include "peeler-common.h"
 
+vector<u_int64_t> inWordArrayTimes;
+vector<u_int64_t> hashTimes;
+
 int hashString(string &input) {
+	u_int64_t start = get_timer();
+
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
 
@@ -27,7 +32,11 @@ int hashString(string &input) {
 
 	int hash_sum = hash1 + hash2 + hash3 + hash4;
 
-	return hash_sum % nextPrime;
+	int result = hash_sum % nextPrime;
+
+	hashTimes.push_back(get_timer() - start);
+
+	return result;
 }
 
 struct Dictionary {
@@ -69,6 +78,8 @@ Dictionary::Dictionary( const char *filename ) {
 }
 
 bool Dictionary::inWordArray(string &s) {
+	u_int64_t start = get_timer();
+
 	int hash = hashString(s);
 
 	try {
@@ -82,12 +93,15 @@ bool Dictionary::inWordArray(string &s) {
 		}
 	} catch (...) {}
 
+	inWordArrayTimes.push_back(get_timer() - start);
+
 	return false;
 }
 
 void Dictionary::check( const char *filename ) {
 	vector<string> query;
 	getWords(filename, query);
+	inWordArrayTimes.reserve(query.size());
 
 	cerr << "checking " << filename << endl;
 	start_timer();  // from elapsed_time.h
