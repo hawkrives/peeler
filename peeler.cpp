@@ -189,7 +189,7 @@ long Dictionary::countAnagrams() {
 
 	for (auto hash : hashTable) {
 		vector<string> &possibilities = hash.second;
-		if (!possibilities.size()) {
+		if (possibilities.size() < 2) {
 			continue;
 		}
 
