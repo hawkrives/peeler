@@ -47,4 +47,8 @@ void getWords(const char *filename, vector<string> &vec) {
 	cerr << "done with file; " << vec.size() << " items." << endl;
 }
 
+void getWords(string &filename, vector<string> &vec) {
+	getWords(filename.c_str(), vec);
+}
+
 #endif
