@@ -40,8 +40,8 @@ data: peeler
 	done
 
 both: peeler peeler-optim
-	time ./peeler words moby
-	time ./peeler-optim words moby
+	time ./peeler words -f moby
+	time ./peeler-optim words -f moby
 
 
 vector.reserve: vector.reserve.cpp
