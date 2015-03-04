@@ -92,10 +92,9 @@ bool Dictionary::inWordArray(string &s) {
 
 	try {
 		vector<string> &possibilities = hashTable.at(hash);
-		int size = possibilities.size();
 
-		for (size_t i = 0; i < size; i++) {
-			if (possibilities[i] == s) {
+		for (auto &word : possibilities) {
+			if (word == s) {
 				inArrayHits.push_back(get_timer() - start);
 				return true;
 			}
@@ -117,9 +116,8 @@ void Dictionary::check(string &filename) {
 	start_timer();  // from elapsed_time.h
 
 	int counter = 0;
-	int n = query.size();
-	for (int i = 0; i < n; i++) {
-		if ( !inWordArray(query[i]) ) {
+	for (auto &item : query) {
+		if ( !inWordArray(item) ) {
 			counter++;
 		}
 	}
