@@ -131,17 +131,15 @@ int main(int argc, char **argv) {
 	Dictionary d(argv[1]);
 	d.check(argv[2]);
 
-	cerr << endl << "stats:" << endl;
+	cout << endl << "stats:" << endl;
 
 	// c++ unsorted_map hashtable stats
-	cerr << "  hashTable [internal] avg items/bucket: " << d.hashTable.load_factor() << endl;
-	cerr << "  hashTable [internal] max items/bucket: " << d.hashTable.max_load_factor() << endl;
-	cerr << "  hashTable [internal] bucket count: " << d.hashTable.bucket_count() << endl;
+	cout << endl;
+	cout << "  [hashTable internal] avg items/bucket: " << d.hashTable.load_factor() << endl;
+	cout << "  [hashTable internal] max items/bucket: " << d.hashTable.max_load_factor() << endl;
+	cout << "  [hashTable internal] bucket count: " << d.hashTable.bucket_count() << endl;
 
 	// our hashtable stats
-	cerr << endl;
-	cerr << "  hashTable key count: " << d.hashTable.size() << endl;
-
 	vector<long> hashSizes;
 	hashSizes.reserve(d.hashTable.size());
 	for (auto item : d.hashTable) hashSizes.push_back(item.second.size());
@@ -151,9 +149,11 @@ int main(int argc, char **argv) {
 	long maxItemsPer = *minMaxSizes.second;
 	long itemsPerHash = average(hashSizes);
 
-	cerr << "  hashTable avg items per hash: " << itemsPerHash << endl;
-	cerr << "  hashTable most items per hash: " << maxItemsPer << endl;
-	cerr << "  hashTable min items per hash: " << minItemsPer << endl;
+	cout << endl;
+	cout << "  [hashTable] key count: " << d.hashTable.size() << endl;
+	cout << "  [hashTable] avg items per hash: " << itemsPerHash << endl;
+	cout << "  [hashTable] most items per hash: " << maxItemsPer << endl;
+	cout << "  [hashTable] min items per hash: " << minItemsPer << endl;
 
 	// cycle counts
 
@@ -166,13 +166,15 @@ int main(int argc, char **argv) {
 		inArrayMisses.begin(), inArrayMisses.end(),
 		back_inserter(inArrayTimes));
 
-	cerr << endl;
-	cerr << "  [inArray] average cycles overall: "  << average(inArrayTimes)  << endl;
-	cerr << "  [inArray] total hits: "              << inArrayHits.size()     << endl;
-	cerr << "  [inArray] hit cycles: "              << sum(inArrayHits)       << endl;
-	cerr << "  [inArray] average cycles per hit: "  << average(inArrayHits)   << endl;
-	cerr << "  [inArray] total misses: "            << inArrayMisses.size()   << endl;
-	cerr << "  [inArray] miss cycles: "             << sum(inArrayMisses)     << endl;
-	cerr << "  [inArray] average cycles per miss: " << average(inArrayMisses) << endl;
-	cerr << "  [hashItem] average cycles: "         << average(hashTimes)     << endl;
+	cout << endl;
+	cout << "  [inArray] average cycles overall: "  << average(inArrayTimes)  << endl;
+	cout << "  [inArray] total hits: "              << inArrayHits.size()     << endl;
+	cout << "  [inArray] hit cycles: "              << sum(inArrayHits)       << endl;
+	cout << "  [inArray] average cycles per hit: "  << average(inArrayHits)   << endl;
+	cout << "  [inArray] total misses: "            << inArrayMisses.size()   << endl;
+	cout << "  [inArray] miss cycles: "             << sum(inArrayMisses)     << endl;
+	cout << "  [inArray] average cycles per miss: " << average(inArrayMisses) << endl;
+
+	cout << endl;
+	cout << "  [hashItem] average cycles: "         << average(hashTimes)     << endl;
 }
