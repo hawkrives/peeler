@@ -9,8 +9,11 @@ using namespace std;
 
 vector<u_int64_t> inArrayHits;
 vector<u_int64_t> inArrayMisses;
+vector<u_int64_t> areAnagramsPass;
+vector<u_int64_t> areAnagramsFail;
 vector<u_int64_t> hashTimes;
-double totalCycles;
+double findAnagramsCycles;
+double dictionaryCheckCycles;
 
 int hashString(string &input) {
 	u_int64_t start = get_timer();
@@ -49,6 +52,7 @@ struct Dictionary {
 	bool inWordArray(string &s);   // single query
 	void check(string &filename);  // multiple queries
 
+	long countAnagrams();
 	vector<string> findAnagrams(string &s);
 };
 
@@ -103,7 +107,7 @@ bool Dictionary::inWordArray(string &s) {
 	return false;
 }
 
-void Dictionary::check(string &filename ) {
+void Dictionary::check(string &filename) {
 	vector<string> query;
 	getWords(filename, query);
 	inArrayHits.reserve(query.size());
@@ -122,11 +126,85 @@ void Dictionary::check(string &filename ) {
 
 	cerr << "Misspelled " << counter << " words." << endl;
 
-	totalCycles = elapsed_time();
+	dictionaryCheckCycles = elapsed_time();
+}
+
+bool areAnagrams(string &s1, string &s2, bool s1_sorted=false, bool s2_sorted=false) {
+	u_int64_t start = get_timer();
+	if (s1.size() != s2.size()) {
+		areAnagramsFail.push_back(get_timer() - start);
+		return false;
+	}
+
+	string s1_sort = s1;
+	if (!s1_sorted) {
+		sort(s1_sort.begin(), s1_sort.end());
+	}
+
+	string s2_sort = s2;
+	if (!s2_sorted) {
+		sort(s2_sort.begin(), s2_sort.end());
+	}
+
+	for (int i = 0; i < s1_sort.size(); i++) {
+		char ch1 = s1_sort[i];
+		char ch2 = s2_sort[i];
+		if (ch1 != ch2) {
+			areAnagramsFail.push_back(get_timer() - start);
+			return false;
+		}
+	}
+	areAnagramsPass.push_back(get_timer() - start);
+	return true;
 }
 
 vector<string> Dictionary::findAnagrams(string &s) {
-	return {};
+	cerr << "looking for anagrams of " << s << endl;
+
+	start_timer();  // from elapsed_time.h
+
+	int hash = hashString(s);
+	string sorted = s;
+	sort(sorted.begin(), sorted.end());
+	vector<string> matches;
+
+	try {
+		vector<string> &possibilities = hashTable.at(hash);
+		int size = possibilities.size();
+
+		for (size_t i = 0; i < size; i++) {
+			if (areAnagrams(sorted, possibilities[i], true)) {
+				matches.push_back(possibilities[i]);
+			}
+		}
+	} catch (...) {}
+
+	findAnagramsCycles = elapsed_time();
+
+	return matches;
+}
+
+long Dictionary::countAnagrams() {
+	long count = 0;
+
+	for (auto hash : hashTable) {
+		vector<string> &possibilities = hash.second;
+		if (!possibilities.size()) {
+			continue;
+		}
+
+		string& test = possibilities.at(0);
+		auto iter = possibilities.begin() + 1;
+
+		for (; iter != possibilities.end(); iter++) {
+			if (areAnagrams(test, *iter)) {
+				cout << test << " <-> " << *iter << endl;
+				count++;
+			}
+		}
+	}
+
+	return count;
 }
 
 unordered_map<string, string> get_args(int argc, char **argv) {
@@ -169,7 +247,8 @@ int main(int argc, char **argv) {
 	auto word = args.find("-w");
 	auto inputFile = args.find("inputFile");
 	if (word != args.end()) {
-		d.findAnagrams(word->second);
+		// d.countAnagrams();
+		// d.findAnagrams(word->second);
 	}
 	else if (inputFile != args.end()) {
 		d.check(inputFile->second);
@@ -179,9 +258,11 @@ int main(int argc, char **argv) {
 		exit(0);
 	}
 
-	cout << endl << "stats:" << endl;
+	long count = d.countAnagrams();
+	cout << count << " anagrams" << endl;
 
-	cout << "  [peeler] total cycles " << totalCycles << endl;
+	/*
+	cout << endl << "stats:" << endl;
 
 	// c++ unsorted_map hashtable stats
 	cout << endl;
@@ -229,6 +310,29 @@ int main(int argc, char **argv) {
 	cout << "  [inWordArray] miss cycles: "             << sum(inArrayMisses)     << endl;
 	cout << "  [inWordArray] average cycles per miss: " << average(inArrayMisses) << endl;
 
+	// merge the hit times and the miss times into another vector
+	std::sort(areAnagramsPass.begin(), areAnagramsPass.end());
+	std::sort(areAnagramsFail.begin(), areAnagramsFail.end());
+	vector<u_int64_t> areAnagramsTimes;
+	merge(
+		areAnagramsPass.begin(), areAnagramsPass.end(),
+		areAnagramsFail.begin(), areAnagramsFail.end(),
+		back_inserter(areAnagramsTimes));
+
 	cout << endl;
-	cout << "  [hashItem] average cycles: "         << average(hashTimes)     << endl;
+	cout << "  [areAnagrams] average cycles overall: "  << average(areAnagramsTimes)  << endl;
+	cout << "  [areAnagrams] total hits: "              << areAnagramsPass.size()     << endl;
+	cout << "  [areAnagrams] hit cycles: "              << sum(areAnagramsPass)       << endl;
+	cout << "  [areAnagrams] average cycles per hit: "  << average(areAnagramsPass)   << endl;
+	cout << "  [areAnagrams] total misses: "            << areAnagramsFail.size()   << endl;
+	cout << "  [areAnagrams] miss cycles: "             << sum(areAnagramsFail)     << endl;
+	cout << "  [areAnagrams] average cycles per miss: " << average(areAnagramsFail) << endl;
+
+	cout << endl;
+	cout << "  [hashItem] average cycles: " << average(hashTimes)     << endl;
+
+	cout << endl;
+	cout << "  [findAnagrams] cycles: "     << findAnagramsCycles << endl;
+	cout << "  [Dictionary::check] cycles " << dictionaryCheckCycles << endl;
+	*/
 }
