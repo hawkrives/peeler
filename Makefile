@@ -55,7 +55,7 @@ anagrams.txt:
 	python anagrams_counter.py < words > anagrams.txt
 
 anagram-count: anagrams.txt
-	grep "\-\-\-\-" anagrams.txt | wc -l
+	tail -n 1 < anagrams.txt
 
 vector.reserve: vector.reserve.cpp
 	$(CC) $(CFLAGS) $< -o $@
