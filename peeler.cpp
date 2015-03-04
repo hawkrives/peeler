@@ -7,8 +7,8 @@
 using namespace std;
 #include "peeler-common.h"
 
-vector<u_int64_t> inWordArraySuccesses;
-vector<u_int64_t> inWordArrayFailures;
+vector<u_int64_t> inArrayHits;
+vector<u_int64_t> inArrayMisses;
 vector<u_int64_t> hashTimes;
 
 int hashString(string &input) {
@@ -45,7 +45,7 @@ struct Dictionary {
 
 	Dictionary(const char *filename);  // constructor
 
-	bool inWordArray(string &s);       // single query
+	bool inArray(string &s);       // single query
 	void check(const char *filename);  // multiple queries
 };
 
@@ -78,7 +78,7 @@ Dictionary::Dictionary( const char *filename ) {
 	getWords(filename, hashTable);
 }
 
-bool Dictionary::inWordArray(string &s) {
+bool Dictionary::inArray(string &s) {
 	u_int64_t start = get_timer();
 
 	int hash = hashString(s);
@@ -89,13 +89,13 @@ bool Dictionary::inWordArray(string &s) {
 
 		for (size_t i = 0; i < size; i++) {
 			if (possibilities[i] == s) {
-				inWordArraySuccesses.push_back(get_timer() - start);
+				inArrayHits.push_back(get_timer() - start);
 				return true;
 			}
 		}
 	} catch (...) {}
 
-	inWordArrayFailures.push_back(get_timer() - start);
+	inArrayMisses.push_back(get_timer() - start);
 
 	return false;
 }
@@ -103,8 +103,8 @@ bool Dictionary::inWordArray(string &s) {
 void Dictionary::check( const char *filename ) {
 	vector<string> query;
 	getWords(filename, query);
-	inWordArraySuccesses.reserve(query.size());
-	inWordArrayFailures.reserve(query.size());
+	inArrayHits.reserve(query.size());
+	inArrayMisses.reserve(query.size());
 
 	cerr << "checking " << filename << endl;
 	start_timer();  // from elapsed_time.h
@@ -112,7 +112,7 @@ void Dictionary::check( const char *filename ) {
 	int counter = 0;
 	int n = query.size();
 	for (int i = 0; i < n; i++) {
-		if ( !inWordArray(query[i]) ) {
+		if ( !inArray(query[i]) ) {
 			counter++;
 		}
 	}
@@ -158,23 +158,21 @@ int main(int argc, char **argv) {
 	// cycle counts
 
 	// merge the hit times and the miss times into another vector
-	std::sort(inWordArraySuccesses.begin(), inWordArraySuccesses.end());
-	std::sort(inWordArrayFailures.begin(), inWordArrayFailures.end());
-	vector<u_int64_t> inWordArrayTimes;
+	std::sort(inArrayHits.begin(), inArrayHits.end());
+	std::sort(inArrayMisses.begin(), inArrayMisses.end());
+	vector<u_int64_t> inArrayTimes;
 	merge(
-		inWordArraySuccesses.begin(), inWordArraySuccesses.end(),
-		inWordArrayFailures.begin(),  inWordArrayFailures.end(),
-		back_inserter(inWordArrayTimes));
+		inArrayHits.begin(),   inArrayHits.end(),
+		inArrayMisses.begin(), inArrayMisses.end(),
+		back_inserter(inArrayTimes));
 
-	double averageCyclesInWordArray = average(inWordArrayTimes);
-	double averageCyclesHashItem = average(hashTimes);
-	double averageCyclesPerHit = average(inWordArraySuccesses);
-	double averageCyclesPerMiss = average(inWordArrayFailures);
 	cerr << endl;
-	cerr << "  [inWordArray] average cycles overall: " << averageCyclesInWordArray << endl;
-	cerr << "  [inWordArray] total hits: " << inWordArraySuccesses.size() << endl;
-	cerr << "  [inWordArray] average cycles per hit: " << averageCyclesPerHit << endl;
-	cerr << "  [inWordArray] total misses: " << inWordArrayFailures.size() << endl;
-	cerr << "  [inWordArray] average cycles per miss: " << averageCyclesPerMiss << endl;
-	cerr << "  [hashItem] average cycles: " << averageCyclesHashItem << endl;
+	cerr << "  [inArray] average cycles overall: "  << average(inArrayTimes)  << endl;
+	cerr << "  [inArray] total hits: "              << inArrayHits.size()     << endl;
+	cerr << "  [inArray] hit cycles: "              << sum(inArrayHits)       << endl;
+	cerr << "  [inArray] average cycles per hit: "  << average(inArrayHits)   << endl;
+	cerr << "  [inArray] total misses: "            << inArrayMisses.size()   << endl;
+	cerr << "  [inArray] miss cycles: "             << sum(inArrayMisses)     << endl;
+	cerr << "  [inArray] average cycles per miss: " << average(inArrayMisses) << endl;
+	cerr << "  [hashItem] average cycles: "         << average(hashTimes)     << endl;
 }
