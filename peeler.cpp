@@ -46,7 +46,7 @@ struct Dictionary {
 
 	Dictionary(const char *filename);  // constructor
 
-	bool inArray(string &s);       // single query
+	bool inWordArray(string &s);       // single query
 	void check(const char *filename);  // multiple queries
 };
 
@@ -79,7 +79,7 @@ Dictionary::Dictionary( const char *filename ) {
 	getWords(filename, hashTable);
 }
 
-bool Dictionary::inArray(string &s) {
+bool Dictionary::inWordArray(string &s) {
 	u_int64_t start = get_timer();
 
 	int hash = hashString(s);
@@ -113,7 +113,7 @@ void Dictionary::check( const char *filename ) {
 	int counter = 0;
 	int n = query.size();
 	for (int i = 0; i < n; i++) {
-		if ( !inArray(query[i]) ) {
+		if ( !inWordArray(query[i]) ) {
 			counter++;
 		}
 	}
@@ -169,13 +169,13 @@ int main(int argc, char **argv) {
 		back_inserter(inArrayTimes));
 
 	cout << endl;
-	cout << "  [inArray] average cycles overall: "  << average(inArrayTimes)  << endl;
-	cout << "  [inArray] total hits: "              << inArrayHits.size()     << endl;
-	cout << "  [inArray] hit cycles: "              << sum(inArrayHits)       << endl;
-	cout << "  [inArray] average cycles per hit: "  << average(inArrayHits)   << endl;
-	cout << "  [inArray] total misses: "            << inArrayMisses.size()   << endl;
-	cout << "  [inArray] miss cycles: "             << sum(inArrayMisses)     << endl;
-	cout << "  [inArray] average cycles per miss: " << average(inArrayMisses) << endl;
+	cout << "  [inWordArray] average cycles overall: "  << average(inArrayTimes)  << endl;
+	cout << "  [inWordArray] total hits: "              << inArrayHits.size()     << endl;
+	cout << "  [inWordArray] hit cycles: "              << sum(inArrayHits)       << endl;
+	cout << "  [inWordArray] average cycles per hit: "  << average(inArrayHits)   << endl;
+	cout << "  [inWordArray] total misses: "            << inArrayMisses.size()   << endl;
+	cout << "  [inWordArray] miss cycles: "             << sum(inArrayMisses)     << endl;
+	cout << "  [inWordArray] average cycles per miss: " << average(inArrayMisses) << endl;
 
 	cout << endl;
 	cout << "  [hashItem] average cycles: "         << average(hashTimes)     << endl;
