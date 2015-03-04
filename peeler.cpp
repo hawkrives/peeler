@@ -25,17 +25,23 @@ int hashString(string &input) {
 		return asciiify(input);
 	}
 
-	string str1 = input.substr(quadtrant*0, quadtrant);
-	string str2 = input.substr(quadtrant*1, quadtrant);
-	string str3 = input.substr(quadtrant*2, quadtrant);
-	string str4 = input.substr(quadtrant*3, len);
+	// string str1 = input.substr(quadtrant*0, quadtrant);
+	// string str2 = input.substr(quadtrant*1, quadtrant);
+	// string str3 = input.substr(quadtrant*2, quadtrant);
+	// string str4 = input.substr(quadtrant*3, len);
+	//
+	// int hash1 = asciiify(str1) * seeds[0];
+	// int hash2 = asciiify(str2) * seeds[1];
+	// int hash3 = asciiify(str3) * seeds[2];
+	// int hash4 = asciiify(str4) * seeds[3];
+	//
+	// int hash_sum = hash1 + hash2 + hash3 + hash4;
 
-	int hash1 = asciiify(str1) * seeds[0];
-	int hash2 = asciiify(str2) * seeds[1];
-	int hash3 = asciiify(str3) * seeds[2];
-	int hash4 = asciiify(str4) * seeds[3];
-
-	int hash_sum = hash1 + hash2 + hash3 + hash4;
+	int hash_sum =
+		asciiify(input.substr(quadtrant*0, quadtrant)) * seeds[0] +
+		asciiify(input.substr(quadtrant*1, quadtrant)) * seeds[1] +
+		asciiify(input.substr(quadtrant*2, quadtrant)) * seeds[2] +
+		asciiify(input.substr(quadtrant*3, len)) * seeds[3];
 
 	int result = hash_sum % nextPrime;
 
