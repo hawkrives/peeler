@@ -48,7 +48,8 @@ void getWords(const char *filename, unordered_map<int, vector<string> > &m) {
 	string s;
 	cerr << "reading/hashing file" << endl;
 	while ( f >> s ) {
-		int hash = hash_string(s);
+		int hash = hashString(s);
+
 		try {
 			vector<string> &current = m.at(hash);
 			current.push_back(s);
@@ -65,7 +66,7 @@ Dictionary::Dictionary( const char *filename ) {
 }
 
 bool Dictionary::inWordArray(string &s) {
-	int hash = hash_string(s);
+	int hash = hashString(s);
 
 	try {
 		vector<string> &possibilities = hashTable.at(hash);
