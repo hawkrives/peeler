@@ -53,8 +53,7 @@ void getWords(const char *filename, unordered_map<int, vector<string> > &m) {
 			vector<string> &current = m.at(hash);
 			current.push_back(s);
 		} catch (...) {
-			vector<string> strings = {s};
-			m.insert(make_pair(hash, strings));
+			m.emplace(hash, vector<string> {s});
 		}
 	}
 
