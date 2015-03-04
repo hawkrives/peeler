@@ -20,11 +20,11 @@ double dictionaryCheckCycles;
 // double hashInit = get_timer() - start_time;
 
 int hashString(string &input) {
-  u_int64_t start = get_timer();
+	u_int64_t start = get_timer();
 
-  // size_t hashed = hash_fn(input);
-  // hashTimes.push_back(get_timer() - start);
-  // return hashed;
+	// size_t hashed = hash_fn(input);
+	// hashTimes.push_back(get_timer() - start);
+	// return hashed;
 
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
@@ -326,7 +326,7 @@ int main(int argc, char **argv) {
 	}
 
 	cout << "  [peeler exec time] seconds: " << executionTime << endl;
-  // cout << "  hashInit time: " << hashInit << endl;
+	// cout << "  hashInit time: " << hashInit << endl;
 
 	return 0;
 }
