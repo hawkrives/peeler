@@ -44,13 +44,15 @@ int hashString(string &input) {
 struct Dictionary {
 	unordered_map<int, vector<string> > hashTable;
 
-	Dictionary(const char *filename);  // constructor
+	Dictionary(string &filename);  // constructor
 
-	bool inWordArray(string &s);       // single query
-	void check(const char *filename);  // multiple queries
+	bool inWordArray(string &s);   // single query
+	void check(string &filename);  // multiple queries
+
+	vector<string> findAnagrams(string &s);
 };
 
-void getWords(const char *filename, unordered_map<int, vector<string> > &m) {
+void getWords(string &filename, unordered_map<int, vector<string> > &m) {
 	ifstream f(filename);
 
 	if ( !f.good() ) {
@@ -75,7 +77,7 @@ void getWords(const char *filename, unordered_map<int, vector<string> > &m) {
 	cerr << "done with file; " << m.size() << " items." << endl;
 }
 
-Dictionary::Dictionary( const char *filename ) {
+Dictionary::Dictionary(string &filename) {
 	getWords(filename, hashTable);
 }
 
@@ -101,7 +103,7 @@ bool Dictionary::inWordArray(string &s) {
 	return false;
 }
 
-void Dictionary::check( const char *filename ) {
+void Dictionary::check(string &filename ) {
 	vector<string> query;
 	getWords(filename, query);
 	inArrayHits.reserve(query.size());
@@ -123,13 +125,59 @@ void Dictionary::check( const char *filename ) {
 	totalCycles = elapsed_time();
 }
 
+vector<string> Dictionary::findAnagrams(string &s) {
+	return {};
+}
+
+unordered_map<string, string> get_args(int argc, char **argv) {
+	string dictionaryFile = argv[1];
+	string inputFile = argv[2];
+	unordered_map<string, string> args = {
+		{"dictionaryFile", dictionaryFile}
+	};
+
+	for (int i = 0; i < argc; i++) {
+		string arg = argv[i];
+		if (arg == "-w" && i < argc - 1) {
+			args.emplace("-w", argv[i+1]);
+			inputFile = "";
+			i++;
+			continue;
+		}
+		else if (arg == "-f" && i < argc - 1) {
+			inputFile = argv[i+1];
+			i++;
+			continue;
+		}
+	}
+
+	args.emplace("inputFile", inputFile);
+
+	return args;
+}
+
 int main(int argc, char **argv) {
-	if ( argc != 3 ) {
-		cerr << "Usage: spellCheck dictionaryFile inputFile" << endl;
+	if ( argc < 3 ) {
+		cerr << "Usage: peeler dictionaryFile [[-f] inputFile] [-w anagramWord]" << endl;
 		exit(0);
 	}
-	Dictionary d(argv[1]);
-	d.check(argv[2]);
+
+	unordered_map<string, string> args = get_args(argc, argv);
+
+	Dictionary d(args.at("dictionaryFile"));
+
+	auto word = args.find("-w");
+	auto inputFile = args.find("inputFile");
+	if (word != args.end()) {
+		d.findAnagrams(word->second);
+	}
+	else if (inputFile != args.end()) {
+		d.check(inputFile->second);
+	}
+	else {
+		cerr << "Usage: peeler dictionaryFile [inputFile] [-w anagramWord]" << endl;
+		exit(0);
+	}
 
 	cout << endl << "stats:" << endl;
 
