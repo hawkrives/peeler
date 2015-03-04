@@ -20,6 +20,11 @@ int sum(vector<T> &vals) {
 	return sum;
 }
 
+template<typename T>
+int average(vector<T> &vals) {
+  return sum(vals) / vals.size();
+}
+
 int asciiify(string input) {
 	size_t ascii = 0;
 	for (char ch : input) {
