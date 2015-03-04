@@ -53,4 +53,7 @@ averages.txt: peeler-avg
 data: spread.txt averages.txt
 
 
+vector.reserve: vector.reserve.cpp
+	$(CC) $(CFLAGS) $< -o $@
+
 %PHONY: clean data time run both
