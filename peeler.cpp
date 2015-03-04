@@ -7,7 +7,8 @@
 using namespace std;
 #include "peeler-common.h"
 
-vector<u_int64_t> inWordArrayTimes;
+vector<u_int64_t> inWordArraySuccesses;
+vector<u_int64_t> inWordArrayFailures;
 vector<u_int64_t> hashTimes;
 
 int hashString(string &input) {
@@ -88,12 +89,13 @@ bool Dictionary::inWordArray(string &s) {
 
 		for (size_t i = 0; i < size; i++) {
 			if (possibilities[i] == s) {
+				inWordArraySuccesses.push_back(get_timer() - start);
 				return true;
 			}
 		}
 	} catch (...) {}
 
-	inWordArrayTimes.push_back(get_timer() - start);
+	inWordArrayFailures.push_back(get_timer() - start);
 
 	return false;
 }
@@ -101,7 +103,8 @@ bool Dictionary::inWordArray(string &s) {
 void Dictionary::check( const char *filename ) {
 	vector<string> query;
 	getWords(filename, query);
-	inWordArrayTimes.reserve(query.size());
+	inWordArraySuccesses.reserve(query.size());
+	inWordArrayFailures.reserve(query.size());
 
 	cerr << "checking " << filename << endl;
 	start_timer();  // from elapsed_time.h
@@ -129,10 +132,13 @@ int main(int argc, char **argv) {
 	d.check(argv[2]);
 
 	cerr << endl << "stats:" << endl;
+
+	// c++ unsorted_map hashtable stats
 	cerr << "  hashTable [internal] avg items/bucket: " << d.hashTable.load_factor() << endl;
 	cerr << "  hashTable [internal] max items/bucket: " << d.hashTable.max_load_factor() << endl;
 	cerr << "  hashTable [internal] bucket count: " << d.hashTable.bucket_count() << endl;
 
+	// our hashtable stats
 	cerr << endl;
 	cerr << "  hashTable key count: " << d.hashTable.size() << endl;
 
@@ -144,14 +150,31 @@ int main(int argc, char **argv) {
 	long minItemsPer = *minMaxSizes.first;
 	long maxItemsPer = *minMaxSizes.second;
 	long itemsPerHash = average(hashSizes);
-	
+
 	cerr << "  hashTable avg items per hash: " << itemsPerHash << endl;
 	cerr << "  hashTable most items per hash: " << maxItemsPer << endl;
 	cerr << "  hashTable min items per hash: " << minItemsPer << endl;
 
-	cerr << endl;
+	// cycle counts
+
+	// merge the hit times and the miss times into another vector
+	std::sort(inWordArraySuccesses.begin(), inWordArraySuccesses.end());
+	std::sort(inWordArrayFailures.begin(), inWordArrayFailures.end());
+	vector<u_int64_t> inWordArrayTimes;
+	merge(
+		inWordArraySuccesses.begin(), inWordArraySuccesses.end(),
+		inWordArrayFailures.begin(),  inWordArrayFailures.end(),
+		back_inserter(inWordArrayTimes));
+
 	double averageCyclesInWordArray = average(inWordArrayTimes);
 	double averageCyclesHashItem = average(hashTimes);
-	cerr << "  average cycles [inWordArray]: " << averageCyclesInWordArray << endl;
-	cerr << "  average cycles [hashItem]: " << averageCyclesHashItem << endl;
+	double averageCyclesPerHit = average(inWordArraySuccesses);
+	double averageCyclesPerMiss = average(inWordArrayFailures);
+	cerr << endl;
+	cerr << "  [inWordArray] average cycles overall: " << averageCyclesInWordArray << endl;
+	cerr << "  [inWordArray] total hits: " << inWordArraySuccesses.size() << endl;
+	cerr << "  [inWordArray] average cycles per hit: " << averageCyclesPerHit << endl;
+	cerr << "  [inWordArray] total misses: " << inWordArrayFailures.size() << endl;
+	cerr << "  [inWordArray] average cycles per miss: " << averageCyclesPerMiss << endl;
+	cerr << "  [hashItem] average cycles: " << averageCyclesHashItem << endl;
 }
