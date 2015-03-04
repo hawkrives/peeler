@@ -1,4 +1,4 @@
-all: peeler
+all: both
 
 COMMONS := peeler-common.h overrides.h elapsed_time.h
 OBJECTS := peeler peeler-spreads peeler-avg peeler-multimap peeler-list
