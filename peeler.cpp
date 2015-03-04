@@ -10,6 +10,7 @@ using namespace std;
 vector<u_int64_t> inArrayHits;
 vector<u_int64_t> inArrayMisses;
 vector<u_int64_t> hashTimes;
+double totalCycles;
 
 int hashString(string &input) {
 	u_int64_t start = get_timer();
@@ -119,8 +120,7 @@ void Dictionary::check( const char *filename ) {
 
 	cerr << "Misspelled " << counter << " words." << endl;
 
-	double cycles = elapsed_time();
-	cerr << "Total cycles: " << cycles << endl;
+	totalCycles = elapsed_time();
 }
 
 int main(int argc, char **argv) {
@@ -132,6 +132,8 @@ int main(int argc, char **argv) {
 	d.check(argv[2]);
 
 	cout << endl << "stats:" << endl;
+
+	cout << "  [peeler] total cycles " << totalCycles << endl;
 
 	// c++ unsorted_map hashtable stats
 	cout << endl;
