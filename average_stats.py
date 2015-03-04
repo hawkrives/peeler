@@ -42,4 +42,4 @@ for stat in stats:
 	stats[stat] /= statCounts[stat]
 
 for stat, val in stats.items():
-	print(stat + ': ', val)
+	print(stat + ':', val)
