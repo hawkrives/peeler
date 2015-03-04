@@ -257,7 +257,7 @@ int main(int argc, char **argv) {
 		exit(0);
 	}
 
-	cout << endl << "stats:" << endl;
+	cout << endl << "stats:";
 
 	// c++ unsorted_map hashtable stats
 	cout << endl;
@@ -295,15 +295,16 @@ int main(int argc, char **argv) {
 		inArrayHits.begin(),   inArrayHits.end(),
 		inArrayMisses.begin(), inArrayMisses.end(),
 		back_inserter(inArrayTimes));
-
-	cout << endl;
-	cout << "  [inWordArray] average cycles overall: "  << average(inArrayTimes)  << endl;
-	cout << "  [inWordArray] total hits: "              << inArrayHits.size()     << endl;
-	cout << "  [inWordArray] hit cycles: "              << sum(inArrayHits)       << endl;
-	cout << "  [inWordArray] average cycles per hit: "  << average(inArrayHits)   << endl;
-	cout << "  [inWordArray] total misses: "            << inArrayMisses.size()   << endl;
-	cout << "  [inWordArray] miss cycles: "             << sum(inArrayMisses)     << endl;
-	cout << "  [inWordArray] average cycles per miss: " << average(inArrayMisses) << endl;
+	if (inArrayTimes.size()) {
+		cout << endl;
+		cout << "  [inWordArray] average cycles overall: "  << average(inArrayTimes)  << endl;
+		cout << "  [inWordArray] total hits: "              << inArrayHits.size()     << endl;
+		cout << "  [inWordArray] hit cycles: "              << sum(inArrayHits)       << endl;
+		cout << "  [inWordArray] average cycles per hit: "  << average(inArrayHits)   << endl;
+		cout << "  [inWordArray] total misses: "            << inArrayMisses.size()   << endl;
+		cout << "  [inWordArray] miss cycles: "             << sum(inArrayMisses)     << endl;
+		cout << "  [inWordArray] average cycles per miss: " << average(inArrayMisses) << endl;
+	}
 
 	// merge the hit times and the miss times into another vector
 	std::sort(areAnagramsPass.begin(), areAnagramsPass.end());
@@ -313,20 +314,25 @@ int main(int argc, char **argv) {
 		areAnagramsPass.begin(), areAnagramsPass.end(),
 		areAnagramsFail.begin(), areAnagramsFail.end(),
 		back_inserter(areAnagramsTimes));
-
-	cout << endl;
-	cout << "  [areAnagrams] average cycles overall: "  << average(areAnagramsTimes)  << endl;
-	cout << "  [areAnagrams] total hits: "              << areAnagramsPass.size()     << endl;
-	cout << "  [areAnagrams] hit cycles: "              << sum(areAnagramsPass)       << endl;
-	cout << "  [areAnagrams] average cycles per hit: "  << average(areAnagramsPass)   << endl;
-	cout << "  [areAnagrams] total misses: "            << areAnagramsFail.size()   << endl;
-	cout << "  [areAnagrams] miss cycles: "             << sum(areAnagramsFail)     << endl;
-	cout << "  [areAnagrams] average cycles per miss: " << average(areAnagramsFail) << endl;
+	if (areAnagramsTimes.size()) {
+		cout << endl;
+		cout << "  [areAnagrams] average cycles overall: "  << average(areAnagramsTimes)  << endl;
+		cout << "  [areAnagrams] total hits: "              << areAnagramsPass.size()     << endl;
+		cout << "  [areAnagrams] hit cycles: "              << sum(areAnagramsPass)       << endl;
+		cout << "  [areAnagrams] average cycles per hit: "  << average(areAnagramsPass)   << endl;
+		cout << "  [areAnagrams] total misses: "            << areAnagramsFail.size()   << endl;
+		cout << "  [areAnagrams] miss cycles: "             << sum(areAnagramsFail)     << endl;
+		cout << "  [areAnagrams] average cycles per miss: " << average(areAnagramsFail) << endl;
+	}
 
 	cout << endl;
 	cout << "  [hashItem] average cycles: " << average(hashTimes)     << endl;
 
 	cout << endl;
-	cout << "  [findAnagrams] cycles: "     << findAnagramsCycles << endl;
-	cout << "  [Dictionary::check] cycles " << dictionaryCheckCycles << endl;
+	if (areAnagramsTimes.size()) {
+		cout << "  [findAnagrams] cycles: "     << findAnagramsCycles << endl;
+	}
+	if (inArrayTimes.size()) {
+		cout << "  [Dictionary::check] cycles " << dictionaryCheckCycles << endl;
+	}
 }
