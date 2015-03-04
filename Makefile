@@ -36,8 +36,15 @@ time: peeler
 data: peeler
 	rm -f log
 	for i in `seq 1 50`; do \
-		./peeler words moby | grep -v "time ./peeler words moby" >> log; \
+		./$< words moby | grep -v "./$< words moby" >> log; \
 	done
+
+data-o: peeler-optim
+	rm -f log
+	for i in `seq 1 50`; do \
+		./$< words moby | grep -v "./$< words moby" >> log; \
+	done
+
 
 both: peeler peeler-optim
 	time ./peeler words -f moby
