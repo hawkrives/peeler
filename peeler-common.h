@@ -2,6 +2,7 @@
 #define  __common__
 
 #include <vector>
+#include <numeric>
 #include <array>
 #include <string>
 #include "elapsed_time.h"
@@ -12,12 +13,7 @@ array<int, 4> seeds = {{216, 0, 9, 111}};
 
 template<typename T>
 int sum(vector<T> &vals) {
-	int sum = 0;
-	size_t size = vals.size();
-	for (size_t i = 0; i < size; i++) {
-		sum += vals[i];
-	}
-	return sum;
+	return accumulate(vals.begin(), vals.end(), 0);
 }
 
 template<typename T>
@@ -28,11 +24,12 @@ int average(vector<T> &vals) {
 }
 
 int asciiify(string input) {
-	size_t ascii = 0;
-	for (char ch : input) {
-		ascii += ch;
-	}
-	return ascii;
+	// size_t ascii = 0;
+	// for (char &ch : input) {
+	// 	ascii += ch;
+	// }
+	// return ascii;
+	return accumulate(input.begin(), input.end(), 0);
 }
 
 void getWords(const char *filename, vector<string> &vec) {
