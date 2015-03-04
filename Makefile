@@ -1,7 +1,7 @@
-all: both
+all: run
 
 COMMONS := peeler-common.h overrides.h elapsed_time.h
-OBJECTS := peeler peeler-spreads peeler-avg peeler-multimap peeler-list
+OBJECTS := peeler peeler-optim peeler-multimap peeler-list
 INPUTS  := $(OBJECTS:.cpp)
 
 CC := g++
@@ -10,10 +10,7 @@ CFLAGS := --std=c++11
 peeler: peeler.cpp $(COMMONS)
 	$(CC) $(CFLAGS) $< -o $@
 
-peeler-spreads: peeler-spreads.cpp $(COMMONS)
-	$(CC) $(CFLAGS) $< -o $@
-
-peeler-avg: peeler-avg.cpp $(COMMONS)
+peeler-list: peeler-list.cpp $(COMMONS)
 	$(CC) $(CFLAGS) $< -o $@
 
 peeler-multimap: peeler-multimap.cpp $(COMMONS)
@@ -24,7 +21,7 @@ peeler-optim: peeler.cpp $(COMMONS)
 
 
 clean:
-	rm -f $(OBJECTS)
+	rm -f $(OBJECTS) vector.reserve
 
 
 run: peeler
@@ -47,8 +44,8 @@ data-o: peeler-optim
 
 
 both: peeler peeler-optim
-	time ./peeler words -f moby
-	time ./peeler-optim words -f moby
+	./peeler words -f moby
+	./peeler-optim words -f moby
 
 
 ana: peeler

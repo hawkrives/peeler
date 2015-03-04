@@ -2,7 +2,6 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-// #include <functional>
 #include <unordered_map>
 #include <map>
 using namespace std;
@@ -16,16 +15,16 @@ vector<u_int64_t> hashTimes;
 double findAnagramsCycles;
 double dictionaryCheckCycles;
 
+// u_int64_t start = get_timer();
 // std::hash<std::string> hash_fn;
+// double hashInit = get_timer() - start_time;
 
 int hashString(string &input) {
-	u_int64_t start = get_timer();
+  u_int64_t start = get_timer();
 
-	// size_t hashed = hash_fn(input);
-	//
-	// hashTimes.push_back(get_timer() - start);
-	//
-	// return hashed;
+  // size_t hashed = hash_fn(input);
+  // hashTimes.push_back(get_timer() - start);
+  // return hashed;
 
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
@@ -327,6 +326,7 @@ int main(int argc, char **argv) {
 	}
 
 	cout << "  [peeler exec time] seconds: " << executionTime << endl;
+  // cout << "  hashInit time: " << hashInit << endl;
 
 	return 0;
 }
