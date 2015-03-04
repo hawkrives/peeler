@@ -10,7 +10,8 @@
 int nextPrime = 500009;
 array<int, 4> seeds = {{216, 0, 9, 111}};
 
-int sum(vector<int> vals) {
+template<typename T>
+int sum(vector<T> &vals) {
 	int sum = 0;
 	size_t size = vals.size();
 	for (size_t i = 0; i < size; i++) {
