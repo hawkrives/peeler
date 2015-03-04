@@ -78,7 +78,7 @@ void getWords(string &filename, unordered_map<int, vector<string> > &m) {
 		}
 	}
 
-	cerr << "done with file; " << m.size() << " items." << endl;
+	cerr << "done with file; " << m.size() << " hashes." << endl;
 }
 
 Dictionary::Dictionary(string &filename) {
