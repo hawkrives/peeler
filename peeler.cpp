@@ -87,11 +87,12 @@ void Dictionary::check( const char *filename ) {
 
 	int counter = 0;
 	int n = query.size();
-	for ( int i = 0; i < n; ++i ) {
+	for (int i = 0; i < n; i++) {
 		if ( !inWordArray(query[i]) ) {
-			++counter;
+			counter++;
 		}
 	}
+
 	cerr << "Misspelled " << counter << " words." << endl;
 
 	double cycles = elapsed_time();
