@@ -41,12 +41,15 @@ struct Dictionary {
 
 void getWords(const char *filename, unordered_map<int, vector<string> > &m) {
 	ifstream f(filename);
+
 	if ( !f.good() ) {
 		cerr << "Error:  unable to open " << filename << endl;
 		exit(-1);
 	}
+
 	string s;
 	cerr << "reading/hashing file" << endl;
+
 	while ( f >> s ) {
 		int hash = hashString(s);
 
@@ -71,9 +74,12 @@ bool Dictionary::inWordArray(string &s) {
 	try {
 		vector<string> &possibilities = hashTable.at(hash);
 		int size = possibilities.size();
-		for (size_t i = 0; i < size; i++)
-			if (possibilities[i] == s)
+
+		for (size_t i = 0; i < size; i++) {
+			if (possibilities[i] == s) {
 				return true;
+			}
+		}
 	} catch (...) {}
 
 	return false;
