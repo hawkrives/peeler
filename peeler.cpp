@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+// #include <functional>
 #include <unordered_map>
 #include <map>
 using namespace std;
@@ -15,8 +16,16 @@ vector<u_int64_t> hashTimes;
 double findAnagramsCycles;
 double dictionaryCheckCycles;
 
+// std::hash<std::string> hash_fn;
+
 int hashString(string &input) {
 	u_int64_t start = get_timer();
+
+	// size_t hashed = hash_fn(input);
+	//
+	// hashTimes.push_back(get_timer() - start);
+	//
+	// return hashed;
 
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
