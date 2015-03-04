@@ -247,8 +247,9 @@ int main(int argc, char **argv) {
 	auto word = args.find("-w");
 	auto inputFile = args.find("inputFile");
 	if (word != args.end()) {
-		// d.countAnagrams();
-		// d.findAnagrams(word->second);
+		d.findAnagrams(word->second);
+		long count = d.countAnagrams();
+		cout << count << " anagrams" << endl;
 	}
 	else if (inputFile != args.end()) {
 		d.check(inputFile->second);
@@ -258,10 +259,6 @@ int main(int argc, char **argv) {
 		exit(0);
 	}
 
-	long count = d.countAnagrams();
-	cout << count << " anagrams" << endl;
-
-	/*
 	cout << endl << "stats:" << endl;
 
 	// c++ unsorted_map hashtable stats
@@ -334,5 +331,4 @@ int main(int argc, char **argv) {
 	cout << endl;
 	cout << "  [findAnagrams] cycles: "     << findAnagramsCycles << endl;
 	cout << "  [Dictionary::check] cycles " << dictionaryCheckCycles << endl;
-	*/
 }
