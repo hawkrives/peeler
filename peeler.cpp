@@ -150,12 +150,16 @@ int main(int argc, char **argv) {
 	long minItemsPer = *minMaxSizes.first;
 	long maxItemsPer = *minMaxSizes.second;
 	long itemsPerHash = average(hashSizes);
+	long countForMinItemsPer = count(hashSizes.begin(), hashSizes.end(), minItemsPer);
+	long countForMaxItemsPer = count(hashSizes.begin(), hashSizes.end(), maxItemsPer);
 
 	cout << endl;
 	cout << "  [hashTable] key count: " << d.hashTable.size() << endl;
 	cout << "  [hashTable] avg items per hash: " << itemsPerHash << endl;
 	cout << "  [hashTable] most items per hash: " << maxItemsPer << endl;
+	cout << "  [hashTable] number of hashes of that size: " << countForMaxItemsPer << endl;
 	cout << "  [hashTable] min items per hash: " << minItemsPer << endl;
+	cout << "  [hashTable] number of hashes of that size: " << countForMinItemsPer << endl;
 
 	// cycle counts
 
