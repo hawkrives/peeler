@@ -1,0 +1,44 @@
+#ifndef  __common__
+#define  __common__
+
+#include <vector>
+#include <array>
+#include <string>
+#include "elapsed_time.h"
+#include "overrides.h"
+
+int nextPrime = 500009;
+array<int, 4> seeds = {{216, 0, 9, 111}};
+
+int sum(vector<int> vals) {
+	int sum = 0;
+	size_t size = vals.size();
+	for (size_t i = 0; i < size; i++) {
+		sum += vals[i];
+	}
+	return sum;
+}
+
+int asciiify(string input) {
+	size_t ascii = 0;
+	for (char ch : input) {
+		ascii += ch;
+	}
+	return ascii;
+}
+
+void getWords(const char *filename, vector<string> &vec) {
+	ifstream f(filename);
+	if ( ! f.good() ) {
+		cerr << "Error:  unable to open " << filename << endl;
+		exit(-1);
+	}
+	string s;
+	cerr << "reading/hashing file" << endl;
+	while ( f >> s ) {
+		vec.push_back(s);
+	}
+	cerr << "done with file" << endl;
+}
+
+#endif

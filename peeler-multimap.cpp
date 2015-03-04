@@ -4,86 +4,9 @@
 #include <algorithm>
 #include <unordered_map>
 #include <map>
-#include <array>
 #include <cstdlib>
+#include "peeler-common.h"
 using namespace std;
-#include "elapsed_time.h"
-
-template<typename T>
-ostream& operator<< (ostream& out, const vector<T>& v) {
-	out << "[";
-	size_t last = v.size() - 1;
-	for(size_t i = 0; i < v.size(); ++i) {
-		out << v[i];
-		if (i != last)
-			out << ", ";
-	}
-	out << "]";
-	return out;
-}
-ostream& operator<< (ostream& out, const pair<int, vector<string> >& p) {
-	int hash = p.first;
-	vector<string> v = p.second;
-	out << hash << " -> ";
-	out << "[";
-	size_t last = v.size() - 1;
-	for(size_t i = 0; i < v.size(); ++i) {
-		out << v[i];
-		if (i != last)
-			out << ", ";
-	}
-	out << "]";
-	return out;
-}
-ostream& operator<< (ostream& out, const pair<int, int >& p) {
-	out << p.second << "\t" << p.first;
-	return out;
-}
-template<typename T>
-ostream& operator<< (ostream& out, const array<T, 4>& v) {
-	out << "[";
-	size_t last = v.size() - 1;
-	for(size_t i = 0; i < v.size(); ++i) {
-		out << v[i];
-		if (i != last)
-			out << ", ";
-	}
-	out << "]";
-	return out;
-}
-
-int nextPrime = 500009;
-array<int, 4> seeds;
-void make_random() {
-	int min = 0;
-	int max = nextPrime;
-	seeds[0] = (rand() / (1.0 + RAND_MAX)) * max + min;
-	seeds[1] = (rand() / (1.0 + RAND_MAX)) * max + min;
-	seeds[2] = (rand() / (1.0 + RAND_MAX)) * max + min;
-	seeds[3] = (rand() / (1.0 + RAND_MAX)) * max + min;
-}
-
-vector<int> seed(size_t max) {
-	vector<int> vals = {216, 0, 9, 111};
-	return vals;
-}
-
-int sum(vector<int> vals) {
-	int sum = 0;
-	size_t size = vals.size();
-	for (size_t i = 0; i < size; i++) {
-		sum += vals[i];
-	}
-	return sum;
-}
-
-int asciiify(string input) {
-	size_t ascii = 0;
-	for (char ch : input) {
-		ascii += ch;
-	}
-	return ascii;
-}
 
 int hash_string(string input) {
 	size_t len = input.size();
@@ -129,35 +52,8 @@ void getWords(const char *filename, vector<string> &vec, unordered_multimap<int,
 		vec.push_back(s);
 		int hash = hash_string(s);
 		m.insert(make_pair(hash, s));
-		// try {
-		// 	vector<string> &current = m.at(hash);
-		// 	current.push_back(s);
-		// } catch (...) {
-		// 	vector<string> strings = {s};
-		// 	m.insert(make_pair(hash, strings));
-		// }
 	}
 	cerr << "done with file; " << m.size() << endl;
-	// map<int, int> sizes;
-	// for (auto pair : m) {
-	// 	sizes.insert(make_pair(pair.first, pair.second.size()));
-	// }
-	// for (auto item : sizes)
-	// 	cout << item << endl;
-}
-
-void getWords(const char *filename, vector<string> &vec) {
-	ifstream f(filename);
-	if ( ! f.good() ) {
-		cerr << "Error:  unable to open " << filename << endl;
-		exit(-1);
-	}
-	string s;
-	cerr << "reading/hashing file" << endl;
-	while ( f >> s ) {
-		vec.push_back(s);
-	}
-	cerr << "done with file" << endl;
 }
 
 Dictionary::Dictionary( const char *filename ) {
@@ -171,13 +67,6 @@ bool Dictionary::inWordArray(string &s) {
 	for (auto it = range.first; it != range.second; it++)
 		if (s == it->second)
 			return true;
-
-	// try {
-	// 	vector<string> possibilities = hashTable.at(hash);
-	// 	for (string str : possibilities)
-	// 		if (str == s)
-	// 			return true;
-	// } catch (...) {}
 
 	return false;
 }
@@ -206,8 +95,6 @@ int main(int argc, char **argv) {
 		cerr << "Usage: spellCheck dictionaryFile inputFile" << endl;
 		exit(0);
 	}
-	// make_random();
-	seeds = {216, 0, 9, 111};
 	Dictionary d(argv[1]);
 	d.check(argv[2]);
 }
