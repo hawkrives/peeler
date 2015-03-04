@@ -135,16 +135,16 @@ int main(int argc, char **argv) {
 
 	cerr << endl;
 	cerr << "  hashTable key count: " << d.hashTable.size() << endl;
+
 	vector<long> hashSizes;
-	long maxItemsPer = 0;
-	long minItemsPer = 0;
 	hashSizes.reserve(d.hashTable.size());
-	for (auto item : d.hashTable) {
-		hashSizes.push_back(item.second.size());
-		maxItemsPer = item.second.size() > maxItemsPer ? item.second.size() : maxItemsPer;
-		minItemsPer = item.second.size() < minItemsPer ? item.second.size() : minItemsPer;
-	}
+	for (auto item : d.hashTable) hashSizes.push_back(item.second.size());
+
+	auto minMaxSizes = minmax_element(hashSizes.begin(), hashSizes.end());
+	long minItemsPer = *minMaxSizes.first;
+	long maxItemsPer = *minMaxSizes.second;
 	long itemsPerHash = average(hashSizes);
+	
 	cerr << "  hashTable avg items per hash: " << itemsPerHash << endl;
 	cerr << "  hashTable most items per hash: " << maxItemsPer << endl;
 	cerr << "  hashTable min items per hash: " << minItemsPer << endl;
