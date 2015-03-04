@@ -22,6 +22,8 @@ int sum(vector<T> &vals) {
 
 template<typename T>
 int average(vector<T> &vals) {
+	if (vals.size() <= 0)
+		return 0;
   return sum(vals) / vals.size();
 }
 
