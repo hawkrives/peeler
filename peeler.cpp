@@ -57,7 +57,8 @@ void getWords(const char *filename, unordered_map<int, vector<string> > &m) {
 			m.insert(make_pair(hash, strings));
 		}
 	}
-	cerr << "done with file; " << m.size() << endl;
+
+	cerr << "done with file; " << m.size() << " items." << endl;
 }
 
 Dictionary::Dictionary( const char *filename ) {

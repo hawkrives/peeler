@@ -44,7 +44,7 @@ void getWords(const char *filename, vector<string> &vec) {
 	while ( f >> s ) {
 		vec.push_back(s);
 	}
-	cerr << "done with file" << endl;
+	cerr << "done with file; " << vec.size() << " items." << endl;
 }
 
 #endif
