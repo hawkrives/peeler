@@ -51,7 +51,13 @@ ana-time: peeler
 	time ./peeler words -w Zz
 
 
+anagrams.txt:
+	python anagrams_counter.py < words > anagrams.txt
+
+anagram-count: anagrams.txt
+	grep "\-\-\-\-" anagrams.txt | wc -l
+
 vector.reserve: vector.reserve.cpp
 	$(CC) $(CFLAGS) $< -o $@
 
-%PHONY: clean data time run both
+%PHONY: clean data time run both anagram-count
