@@ -1,48 +1,47 @@
 all: peeler
 
-peeler: peeler.cpp elapsed_time.h
-	g++ --std=c++11 peeler.cpp -o peeler
+COMMONS := peeler-common.h overrides.h elapsed_time.h
+OBJECTS := peeler peeler-spreads peeler-avg peeler-multimap peeler-list
+INPUTS  := $(OBJECTS:.cpp)
 
-peeler-spreads: peeler-spreads.cpp elapsed_time.h
-	g++ --std=c++11 peeler-spreads.cpp -o peeler-spreads
+CC := g++
+CFLAGS := --std=c++11
 
-peeler-avg: peeler-avg.cpp elapsed_time.h
-	g++ --std=c++11 peeler-avg.cpp -o peeler-avg
+peeler: peeler.cpp $(COMMONS)
+	$(CC) $(CFLAGS) $< -o $@
 
-peeler-multimap: peeler-multimap.cpp elapsed_time.h
-	g++ -O9 --std=c++11 peeler-multimap.cpp -o peeler-multimap
+peeler-spreads: peeler-spreads.cpp $(COMMONS)
+	$(CC) $(CFLAGS) $< -o $@
 
-peeler-optim: peeler.cpp elapsed_time.h
-	g++ -O9 --std=c++11 peeler.cpp -o peeler-o
+peeler-avg: peeler-avg.cpp $(COMMONS)
+	$(CC) $(CFLAGS) $< -o $@
 
-node_modules/.bin/babel:
-	npm install babel
+peeler-multimap: peeler-multimap.cpp $(COMMONS)
+	$(CC) $(CFLAGS) $< -o $@
 
-node_modules/lodash/package.json:
-	npm install lodash
+peeler-optim: peeler.cpp $(COMMONS)
+	$(CC) -O9 $(CFLAGS) $< -o $@
 
-peeler.js: peeler.es node_modules/lodash/package.json node_modules/.bin/babel
-	node_modules/.bin/babel peeler.es > peeler.js
 
 clean:
-	rm -f peeler.o peeler peeler-o peeler-spreads peeler.js
+	rm -f $(OBJECTS)
 
-js: peeler.js
 
-run-cpp: peeler
+run: peeler
 	./peeler words moby
+
+time: peeler
+	time ./peeler words moby
+
+both: peeler peeler-optim
+	time ./peeler words moby
+	time ./peeler-optim words moby
 
 run-optim: peeler-optim
 	./peeler-o words moby
 
 run-multi: peeler-multimap
 	./peeler-multimap words moby
-
-run-js: peeler.js
-	node ./peeler.js
-
-run-py:
-	python3 ./peeler.py
 
 spread.txt: peeler-spreads
 	./peeler-spreads words moby | sort -n
@@ -54,4 +53,4 @@ averages.txt: peeler-avg
 data: spread.txt averages.txt
 
 
-%PHONY: clean js
+%PHONY: clean data time run both
