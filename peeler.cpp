@@ -169,11 +169,10 @@ vector<string> Dictionary::findAnagrams(string &s) {
 
 	try {
 		vector<string> &possibilities = hashTable.at(hash);
-		int size = possibilities.size();
 
-		for (size_t i = 0; i < size; i++) {
-			if (areAnagrams(sorted, possibilities[i], true)) {
-				matches.push_back(possibilities[i]);
+		for (auto &word : possibilities) {
+			if (areAnagrams(sorted, word, true)) {
+				matches.push_back(word);
 			}
 		}
 	} catch (...) {}
