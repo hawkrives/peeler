@@ -33,24 +33,15 @@ run: peeler
 time: peeler
 	time ./peeler words moby
 
+data: peeler
+	rm log
+	for i in `seq 1 5`; do \
+		time ./peeler words moby | grep -v "time ./peeler words moby" >> log; \
+	done
+
 both: peeler peeler-optim
 	time ./peeler words moby
 	time ./peeler-optim words moby
-
-run-optim: peeler-optim
-	./peeler-o words moby
-
-run-multi: peeler-multimap
-	./peeler-multimap words moby
-
-spread.txt: peeler-spreads
-	./peeler-spreads words moby | sort -n
-
-averages.txt: peeler-avg
-	./peeler-avg words moby > avgs.txt
-	awk -f ./average.awk < avgs.txt
-
-data: spread.txt averages.txt
 
 
 vector.reserve: vector.reserve.cpp
