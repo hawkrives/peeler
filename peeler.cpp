@@ -310,6 +310,6 @@ int main(int argc, char **argv) {
 		cout << "  [findAnagrams] cycles: "     << findAnagramsCycles << endl;
 	}
 	if (inArrayTimes.size()) {
-		cout << "  [Dictionary::check] cycles " << dictionaryCheckCycles << endl;
+		cout << "  [Dictionary::check] cycles: " << dictionaryCheckCycles << endl;
 	}
 }
