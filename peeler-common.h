@@ -38,11 +38,14 @@ void getWords(const char *filename, vector<string> &vec) {
 		cerr << "Error:  unable to open " << filename << endl;
 		exit(-1);
 	}
+
 	string s;
 	cerr << "reading/hashing file" << endl;
+
 	while ( f >> s ) {
 		vec.push_back(s);
 	}
+
 	cerr << "done with file; " << vec.size() << " items." << endl;
 }
 
