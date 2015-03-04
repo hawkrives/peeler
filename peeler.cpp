@@ -210,6 +210,8 @@ long Dictionary::countAnagrams() {
 }
 
 int main(int argc, char **argv) {
+	clock_t tStart = clock();
+
 	if ( argc < 3 ) {
 		cerr << "Usage: peeler dictionaryFile [[-f] inputFile] [-w anagramWord]" << endl;
 		exit(0);
@@ -233,6 +235,8 @@ int main(int argc, char **argv) {
 		cerr << "Usage: peeler dictionaryFile [inputFile] [-w anagramWord]" << endl;
 		exit(0);
 	}
+
+	double executionTime = (double)(clock() - tStart) / (double)CLOCKS_PER_SEC;
 
 	cout << endl << "stats:";
 
@@ -312,4 +316,8 @@ int main(int argc, char **argv) {
 	if (inArrayTimes.size()) {
 		cout << "  [Dictionary::check] cycles: " << dictionaryCheckCycles << endl;
 	}
+
+	cout << "  [peeler exec time] seconds: " << executionTime << endl;
+
+	return 0;
 }

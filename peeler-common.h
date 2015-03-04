@@ -7,6 +7,7 @@
 #include <string>
 #include "elapsed_time.h"
 #include "overrides.h"
+#include <time.h>
 
 int nextPrime = 500009;
 array<int, 4> seeds = {{216, 0, 9, 111}};
