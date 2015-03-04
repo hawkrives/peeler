@@ -44,6 +44,13 @@ both: peeler peeler-optim
 	time ./peeler-optim words -f moby
 
 
+ana: peeler
+	./peeler words moby -w Zz
+
+ana-time: peeler
+	time ./peeler words -w Zz
+
+
 vector.reserve: vector.reserve.cpp
 	$(CC) $(CFLAGS) $< -o $@
 
