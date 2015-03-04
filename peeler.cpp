@@ -127,4 +127,31 @@ int main(int argc, char **argv) {
 	}
 	Dictionary d(argv[1]);
 	d.check(argv[2]);
+
+	cerr << endl << "stats:" << endl;
+	cerr << "  hashTable [internal] avg items/bucket: " << d.hashTable.load_factor() << endl;
+	cerr << "  hashTable [internal] max items/bucket: " << d.hashTable.max_load_factor() << endl;
+	cerr << "  hashTable [internal] bucket count: " << d.hashTable.bucket_count() << endl;
+
+	cerr << endl;
+	cerr << "  hashTable key count: " << d.hashTable.size() << endl;
+	vector<long> hashSizes;
+	long maxItemsPer = 0;
+	long minItemsPer = 0;
+	hashSizes.reserve(d.hashTable.size());
+	for (auto item : d.hashTable) {
+		hashSizes.push_back(item.second.size());
+		maxItemsPer = item.second.size() > maxItemsPer ? item.second.size() : maxItemsPer;
+		minItemsPer = item.second.size() < minItemsPer ? item.second.size() : minItemsPer;
+	}
+	long itemsPerHash = average(hashSizes);
+	cerr << "  hashTable avg items per hash: " << itemsPerHash << endl;
+	cerr << "  hashTable most items per hash: " << maxItemsPer << endl;
+	cerr << "  hashTable min items per hash: " << minItemsPer << endl;
+
+	cerr << endl;
+	double averageCyclesInWordArray = average(inWordArrayTimes);
+	double averageCyclesHashItem = average(hashTimes);
+	cerr << "  average cycles [inWordArray]: " << averageCyclesInWordArray << endl;
+	cerr << "  average cycles [hashItem]: " << averageCyclesHashItem << endl;
 }
