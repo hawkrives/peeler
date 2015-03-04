@@ -146,16 +146,15 @@ bool areAnagrams(string &s1, string &s2, bool s1_sorted=false, bool s2_sorted=fa
 		sort(s2_sort.begin(), s2_sort.end());
 	}
 
-	for (int i = 0; i < s1_sort.size(); i++) {
-		char ch1 = s1_sort[i];
-		char ch2 = s2_sort[i];
-		if (ch1 != ch2) {
-			areAnagramsFail.push_back(get_timer() - start);
-			return false;
-		}
+	// cout << s1_sort << " " << s2_sort << endl;
+
+	if (s1_sort == s2_sort) {
+		areAnagramsPass.push_back(get_timer() - start);
+		return true;
 	}
-	areAnagramsPass.push_back(get_timer() - start);
-	return true;
+
+	areAnagramsFail.push_back(get_timer() - start);
+	return false;
 }
 
 vector<string> Dictionary::findAnagrams(string &s) {
