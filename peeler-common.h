@@ -24,7 +24,7 @@ template<typename T>
 int average(vector<T> &vals) {
 	if (vals.size() <= 0)
 		return 0;
-  return sum(vals) / vals.size();
+	return sum(vals) / vals.size();
 }
 
 int asciiify(string input) {
