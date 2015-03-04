@@ -7,7 +7,7 @@
 using namespace std;
 #include "peeler-common.h"
 
-int hash_string(string input) {
+int hashString(string &input) {
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
 
