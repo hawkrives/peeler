@@ -205,33 +205,6 @@ long Dictionary::countAnagrams() {
 	return count;
 }
 
-unordered_map<string, string> get_args(int argc, char **argv) {
-	string dictionaryFile = argv[1];
-	string inputFile = argv[2];
-	unordered_map<string, string> args = {
-		{"dictionaryFile", dictionaryFile}
-	};
-
-	for (int i = 0; i < argc; i++) {
-		string arg = argv[i];
-		if (arg == "-w" && i < argc - 1) {
-			args.emplace("-w", argv[i+1]);
-			inputFile = "";
-			i++;
-			continue;
-		}
-		else if (arg == "-f" && i < argc - 1) {
-			inputFile = argv[i+1];
-			i++;
-			continue;
-		}
-	}
-
-	args.emplace("inputFile", inputFile);
-
-	return args;
-}
-
 int main(int argc, char **argv) {
 	if ( argc < 3 ) {
 		cerr << "Usage: peeler dictionaryFile [[-f] inputFile] [-w anagramWord]" << endl;
