@@ -49,7 +49,7 @@ both: peeler peeler-optim
 
 
 ana: peeler
-	./peeler words moby -w Zz
+	./peeler words moby -w rusty
 
 ana-time: peeler
 	time ./peeler words -w Zz
