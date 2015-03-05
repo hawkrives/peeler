@@ -15,16 +15,8 @@ vector<u_int64_t> hashTimes;
 double findAnagramsCycles;
 double dictionaryCheckCycles;
 
-// u_int64_t start = get_timer();
-// std::hash<std::string> hash_fn;
-// double hashInit = get_timer() - start_time;
-
 int hashString(string &input) {
 	u_int64_t start = get_timer();
-
-	// size_t hashed = hash_fn(input);
-	// hashTimes.push_back(get_timer() - start);
-	// return hashed;
 
 	size_t len = input.size();
 	size_t quadtrant = len / 4;
@@ -35,18 +27,6 @@ int hashString(string &input) {
 
 	string sorted = input;
 	sort(sorted.begin(), sorted.end());
-
-	// string str1 = input.substr(quadtrant*0, quadtrant);
-	// string str2 = input.substr(quadtrant*1, quadtrant);
-	// string str3 = input.substr(quadtrant*2, quadtrant);
-	// string str4 = input.substr(quadtrant*3, len);
-	//
-	// int hash1 = asciiify(str1) * seeds[0];
-	// int hash2 = asciiify(str2) * seeds[1];
-	// int hash3 = asciiify(str3) * seeds[2];
-	// int hash4 = asciiify(str4) * seeds[3];
-	//
-	// int hash_sum = hash1 + hash2 + hash3 + hash4;
 
 	int hash_sum =
 		asciiify(sorted.substr(quadtrant*0, quadtrant)) * seeds[0] +
@@ -78,18 +58,6 @@ int hashStringLetter(string &input) {
 	return result;
 }
 
-struct Dictionary {
-	unordered_map<int, vector<string> > hashTable;
-
-	Dictionary(string &filename);  // constructor
-
-	bool inWordArray(string &s);   // single query
-	void check(string &filename);  // multiple queries
-
-	long countAnagrams();
-	vector<string> findAnagrams(string &s);
-};
-
 void getWords(string &filename, unordered_map<int, vector<string> > &m) {
 	ifstream f(filename);
 
@@ -113,52 +81,6 @@ void getWords(string &filename, unordered_map<int, vector<string> > &m) {
 	}
 
 	cerr << "done with file; " << m.size() << " hashes." << endl;
-}
-
-Dictionary::Dictionary(string &filename) {
-	getWords(filename, hashTable);
-}
-
-bool Dictionary::inWordArray(string &s) {
-	u_int64_t start = get_timer();
-
-	int hash = hashStringLetter(s);
-
-	try {
-		vector<string> &possibilities = hashTable.at(hash);
-
-		for (auto &word : possibilities) {
-			if (word == s) {
-				inArrayHits.push_back(get_timer() - start);
-				return true;
-			}
-		}
-	} catch (...) {}
-
-	inArrayMisses.push_back(get_timer() - start);
-
-	return false;
-}
-
-void Dictionary::check(string &filename) {
-	vector<string> query;
-	getWords(filename, query);
-	inArrayHits.reserve(query.size());
-	inArrayMisses.reserve(query.size());
-
-	cerr << "checking " << filename << endl;
-	start_timer();  // from elapsed_time.h
-
-	int counter = 0;
-	for (auto &item : query) {
-		if ( !inWordArray(item) ) {
-			counter++;
-		}
-	}
-
-	cerr << "Misspelled " << counter << " words." << endl;
-
-	dictionaryCheckCycles = elapsed_time();
 }
 
 bool areAnagrams(string &s1, string &s2, bool s1_sorted=false, bool s2_sorted=false) {
@@ -201,53 +123,115 @@ bool areAnagrams(string &s1, string &s2, bool s1_sorted=false, bool s2_sorted=fa
 	*/
 }
 
-vector<string> Dictionary::findAnagrams(string &s) {
-	cerr << "looking for anagrams of " << s << endl;
+struct Dictionary {
+	unordered_map<int, vector<string> > hashTable;
 
-	start_timer();  // from elapsed_time.h
-
-	int hash = hashStringLetter(s);
-	string sorted = s;
-	sort(sorted.begin(), sorted.end());
-	vector<string> matches;
-
-	try {
-		vector<string> &possibilities = hashTable.at(hash);
-
-		for (auto &word : possibilities) {
-			if (areAnagrams(sorted, word, true)) {
-				matches.push_back(word);
-			}
-		}
-	} catch (...) {}
-
-	findAnagramsCycles = elapsed_time();
-
-	return matches;
-}
-
-long Dictionary::countAnagrams() {
-	long count = 0;
-
-	for (auto hash : hashTable) {
-		vector<string> &possibilities = hash.second;
-		if (possibilities.size() < 2) {
-			continue;
-		}
-
-		string& test = possibilities.at(0);
-		auto iter = possibilities.begin() + 1;
-
-		for (; iter != possibilities.end(); iter++) {
-			if (areAnagrams(test, *iter)) {
-				cout << test << " <-> " << *iter << endl;
-				count++;
-			}
-		}
+	Dictionary(string &filename) {
+		getWords(filename, hashTable);
 	}
 
-	return count;
-}
+
+	/////
+	/// Spelling
+	///
+
+	bool inWordArray(string &s) {
+		u_int64_t start = get_timer();
+
+		int hash = hashStringLetter(s);
+
+		try {
+			vector<string> &possibilities = hashTable.at(hash);
+
+			for (auto &word : possibilities) {
+				if (word == s) {
+					inArrayHits.push_back(get_timer() - start);
+					return true;
+				}
+			}
+		} catch (...) {}
+
+		inArrayMisses.push_back(get_timer() - start);
+
+		return false;
+	}
+
+	void check(string &filename) {
+		vector<string> query;
+		getWords(filename, query);
+		inArrayHits.reserve(query.size());
+		inArrayMisses.reserve(query.size());
+
+		cerr << "checking " << filename << endl;
+		start_timer();  // from elapsed_time.h
+
+		int counter = 0;
+		for (auto &item : query) {
+			if ( !inWordArray(item) ) {
+				counter++;
+			}
+		}
+
+		cerr << "Misspelled " << counter << " words." << endl;
+
+		dictionaryCheckCycles = elapsed_time();
+	}
+
+
+	/////
+	/// Anagrams
+	///
+
+	vector<string> findAnagrams(string &s) {
+		cerr << "looking for anagrams of " << s << endl;
+
+		start_timer();  // from elapsed_time.h
+
+		int hash = hashStringLetter(s);
+		string sorted = s;
+		sort(sorted.begin(), sorted.end());
+		vector<string> matches;
+
+		try {
+			vector<string> &possibilities = hashTable.at(hash);
+
+			for (auto &word : possibilities) {
+				if (areAnagrams(sorted, word, true)) {
+					matches.push_back(word);
+				}
+			}
+		} catch (...) {}
+
+		findAnagramsCycles = elapsed_time();
+
+		return matches;
+	}
+
+	long countAnagrams(bool verbose=false) {
+		long count = 0;
+
+		for (auto hash : hashTable) {
+			vector<string> &possibilities = hash.second;
+			if (possibilities.size() < 2) {
+				continue;
+			}
+
+			string& test = possibilities.at(0);
+			auto iter = possibilities.begin() + 1;
+			// bool hasMatch = false;
+
+			for (; iter != possibilities.end(); iter++) {
+				if (areAnagrams(test, *iter)) {
+					if (verbose)
+						cout << test << " <-> " << *iter << endl;
+					count++;
+				}
+			}
+		}
+
+		return count;
+	}
+};
 
 int main(int argc, char **argv) {
 	clock_t tStart = clock();
@@ -266,11 +250,14 @@ int main(int argc, char **argv) {
 	Dictionary d(args.at("dictionaryFile"));
 
 	auto word = args.find("-w");
+	auto countAnagrams = args.find("--count-anagrams");
 	auto inputFile = args.find("inputFile");
-	if (word != args.end()) {
+	if (countAnagrams != args.end()) {
+		long countAnagrams = d.countAnagrams();
+		cout << countAnagrams << " anagrams" << endl;
+	}
+	else if (word != args.end()) {
 		d.findAnagrams(word->second);
-		long count = d.countAnagrams();
-		cout << count << " anagrams" << endl;
 	}
 	else if (inputFile != args.end()) {
 		d.check(inputFile->second);
@@ -313,8 +300,8 @@ int main(int argc, char **argv) {
 	// cycle counts
 
 	// merge the hit times and the miss times into another vector
-	std::sort(inArrayHits.begin(), inArrayHits.end());
-	std::sort(inArrayMisses.begin(), inArrayMisses.end());
+	sort(inArrayHits.begin(), inArrayHits.end());
+	sort(inArrayMisses.begin(), inArrayMisses.end());
 	vector<u_int64_t> inArrayTimes;
 	merge(
 		inArrayHits.begin(),   inArrayHits.end(),
@@ -332,8 +319,8 @@ int main(int argc, char **argv) {
 	}
 
 	// merge the hit times and the miss times into another vector
-	std::sort(areAnagramsPass.begin(), areAnagramsPass.end());
-	std::sort(areAnagramsFail.begin(), areAnagramsFail.end());
+	sort(areAnagramsPass.begin(), areAnagramsPass.end());
+	sort(areAnagramsFail.begin(), areAnagramsFail.end());
 	vector<u_int64_t> areAnagramsTimes;
 	merge(
 		areAnagramsPass.begin(), areAnagramsPass.end(),

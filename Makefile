@@ -49,11 +49,10 @@ both: peeler peeler-optim
 
 
 ana: peeler
-	./peeler words moby -w rusty
+	./peeler words moby --count-anagrams
 
-ana-time: peeler
-	time ./peeler words -w Zz
-
+ana-v: peeler
+	./peeler words moby --count-anagrams --verbose
 
 anagrams.txt:
 	python anagrams_counter.py < words > anagrams.txt
