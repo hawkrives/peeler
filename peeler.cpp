@@ -306,9 +306,9 @@ int main(int argc, char **argv) {
 	cout << "  [hashTable] key count: " << d.hashTable.size() << endl;
 	cout << "  [hashTable] avg items per hash: " << itemsPerHash << endl;
 	cout << "  [hashTable] most items per hash: " << maxItemsPer << endl;
-	cout << "  [hashTable] number of hashes of that size: " << countForMaxItemsPer << endl;
+	cout << "  [hashTable] number of hashes of that [max] size: " << countForMaxItemsPer << endl;
 	cout << "  [hashTable] min items per hash: " << minItemsPer << endl;
-	cout << "  [hashTable] number of hashes of that size: " << countForMinItemsPer << endl;
+	cout << "  [hashTable] number of hashes of that [min] size: " << countForMinItemsPer << endl;
 
 	// cycle counts
 
