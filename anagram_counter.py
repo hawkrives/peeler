@@ -11,10 +11,11 @@ def order(line):
 # read from file and prepare
 words = []
 for line in fileinput.input():
-    word = []
-    word.append(line.lower().strip())
-    word.append(order(word[0]))
-    words.append(word)
+	word = []
+	# word.append(line.lower().strip())
+	word.append(line.strip())
+	word.append(order(word[0]))
+	words.append(word)
 
 # sort
 words.sort(key=itemgetter(1))
