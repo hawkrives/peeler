@@ -207,25 +207,37 @@ struct Dictionary {
 	}
 
 	long countAnagrams(bool verbose=false) {
+		map<string, vector<string> > reSorted;
 		long count = 0;
 
 		for (auto hash : hashTable) {
 			vector<string> &possibilities = hash.second;
+			for (auto &word : possibilities) {
+				string sorted = word;
+				sort(sorted.begin(), sorted.end());
+
+				try {
+					vector<string> &current = reSorted.at(sorted);
+					current.push_back(word);
+				} catch (...) {
+					reSorted.emplace(sorted, vector<string> {word});
+				}
+			}
+		}
+
+		for (auto hash : reSorted) {
+			vector<string> &possibilities = hash.second;
+
 			if (possibilities.size() < 2) {
 				continue;
 			}
 
-			string& test = possibilities.at(0);
-			auto iter = possibilities.begin() + 1;
-			// bool hasMatch = false;
-
-			for (; iter != possibilities.end(); iter++) {
-				if (areAnagrams(test, *iter)) {
-					if (verbose)
-						cout << test << " <-> " << *iter << endl;
-					count++;
-				}
+			for (auto &word : possibilities) {
+				if (verbose)
+					cout << word << " ";
 			}
+			cout << endl;
+			count++;
 		}
 
 		return count;
