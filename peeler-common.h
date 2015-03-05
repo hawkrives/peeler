@@ -71,6 +71,10 @@ unordered_map<string, string> get_args(int argc, char **argv) {
 			i++;
 			continue;
 		}
+		else if (arg == "--count-anagrams") {
+			args.emplace("--count-anagrams", "true");
+			continue;
+		}
 		else if (arg == "-f" && i < argc - 1) {
 			inputFile = argv[i+1];
 			i++;
