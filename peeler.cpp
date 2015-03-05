@@ -58,6 +58,23 @@ int hashString(string &input) {
 	return result;
 }
 
+int hashStringLetter(string &input) {
+	u_int64_t start = get_timer();
+
+	size_t len = input.size();
+
+	int result = 0;
+
+	for (int i = 0; i < len; i++)
+		result += letterHashes[ input[i] ];
+
+	result %= nextPrime;
+
+	hashTimes.push_back(get_timer() - start);
+
+	return result;
+}
+
 struct Dictionary {
 	unordered_map<int, vector<string> > hashTable;
 
@@ -82,7 +99,7 @@ void getWords(string &filename, unordered_map<int, vector<string> > &m) {
 	cerr << "reading/hashing file" << endl;
 
 	while ( f >> s ) {
-		int hash = hashString(s);
+		int hash = hashStringLetter(s);
 
 		try {
 			vector<string> &current = m.at(hash);
@@ -102,7 +119,7 @@ Dictionary::Dictionary(string &filename) {
 bool Dictionary::inWordArray(string &s) {
 	u_int64_t start = get_timer();
 
-	int hash = hashString(s);
+	int hash = hashStringLetter(s);
 
 	try {
 		vector<string> &possibilities = hashTable.at(hash);
@@ -174,7 +191,7 @@ vector<string> Dictionary::findAnagrams(string &s) {
 
 	start_timer();  // from elapsed_time.h
 
-	int hash = hashString(s);
+	int hash = hashStringLetter(s);
 	string sorted = s;
 	sort(sorted.begin(), sorted.end());
 	vector<string> matches;
@@ -225,6 +242,9 @@ int main(int argc, char **argv) {
 		cerr << usage << endl;
 		exit(0);
 	}
+
+	srand(time(NULL));
+	initLetterHashes();
 
 	unordered_map<string, string> args = get_args(argc, argv);
 

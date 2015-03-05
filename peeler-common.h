@@ -8,9 +8,11 @@
 #include "elapsed_time.h"
 #include "overrides.h"
 #include <time.h>
+#include <stdlib.h>
 
 int nextPrime = 500009;
 array<int, 4> seeds = {{216, 0, 9, 111}};
+array<int, 256> letterHashes;
 
 template<typename T>
 int sum(vector<T> &vals) {
@@ -79,6 +81,11 @@ unordered_map<string, string> get_args(int argc, char **argv) {
 	args.emplace("inputFile", inputFile);
 
 	return args;
+}
+
+void initLetterHashes() {
+	for (int i = 0; i < 256; ++i)
+		letterHashes[i] = int(rand() / (1.0 + RAND_MAX) * nextPrime);
 }
 
 #endif
