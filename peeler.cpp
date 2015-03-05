@@ -219,9 +219,10 @@ long Dictionary::countAnagrams() {
 
 int main(int argc, char **argv) {
 	clock_t tStart = clock();
+	string usage = "Usage: peeler dictionaryFile [[-f] inputFile] [-w anagramWord]";
 
 	if ( argc < 3 ) {
-		cerr << "Usage: peeler dictionaryFile [[-f] inputFile] [-w anagramWord]" << endl;
+		cerr << usage << endl;
 		exit(0);
 	}
 
@@ -240,7 +241,7 @@ int main(int argc, char **argv) {
 		d.check(inputFile->second);
 	}
 	else {
-		cerr << "Usage: peeler dictionaryFile [inputFile] [-w anagramWord]" << endl;
+		cerr << usage << endl;
 		exit(0);
 	}
 
