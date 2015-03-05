@@ -269,7 +269,8 @@ int main(int argc, char **argv) {
 		long countAnagrams = d.countAnagrams(verbose);
 	}
 	else if (word != args.end()) {
-		d.findAnagrams(word->second);
+		auto matches = d.findAnagrams(word->second);
+		cerr << "anagrams: " << matches << endl;
 	}
 	else if (inputFile != args.end()) {
 		d.check(inputFile->second);
