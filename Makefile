@@ -42,6 +42,12 @@ data-o: peeler-optim
 		./$< words moby | grep -v "./$< words moby" >> log; \
 	done
 
+data-ana: peeler
+	rm -f log
+	for i in `seq 1 50`; do \
+		./$< words -w Hamito-Semitic | grep -v "./$< words -w Hamito-Semitic" >> anagrams.log; \
+	done
+
 
 both: peeler peeler-optim
 	./peeler words -f moby
