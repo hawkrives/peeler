@@ -163,6 +163,17 @@ void Dictionary::check(string &filename) {
 
 bool areAnagrams(string &s1, string &s2, bool s1_sorted=false, bool s2_sorted=false) {
 	u_int64_t start = get_timer();
+
+	bool result = is_permutation(s1.begin(), s1.end(), s2.begin());
+	if (result) {
+		areAnagramsPass.push_back(get_timer() - start);
+		return true;
+	}
+
+	areAnagramsFail.push_back(get_timer() - start);
+	return false;
+
+	/*
 	if (s1.size() != s2.size()) {
 		areAnagramsFail.push_back(get_timer() - start);
 		return false;
@@ -187,6 +198,7 @@ bool areAnagrams(string &s1, string &s2, bool s1_sorted=false, bool s2_sorted=fa
 
 	areAnagramsFail.push_back(get_timer() - start);
 	return false;
+	*/
 }
 
 vector<string> Dictionary::findAnagrams(string &s) {
