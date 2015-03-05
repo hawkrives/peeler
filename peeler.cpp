@@ -33,6 +33,9 @@ int hashString(string &input) {
 		return asciiify(input);
 	}
 
+	string sorted = input;
+	sort(sorted.begin(), sorted.end());
+
 	// string str1 = input.substr(quadtrant*0, quadtrant);
 	// string str2 = input.substr(quadtrant*1, quadtrant);
 	// string str3 = input.substr(quadtrant*2, quadtrant);
@@ -46,10 +49,10 @@ int hashString(string &input) {
 	// int hash_sum = hash1 + hash2 + hash3 + hash4;
 
 	int hash_sum =
-		asciiify(input.substr(quadtrant*0, quadtrant)) * seeds[0] +
-		asciiify(input.substr(quadtrant*1, quadtrant)) * seeds[1] +
-		asciiify(input.substr(quadtrant*2, quadtrant)) * seeds[2] +
-		asciiify(input.substr(quadtrant*3, len)) * seeds[3];
+		asciiify(sorted.substr(quadtrant*0, quadtrant)) * seeds[0] +
+		asciiify(sorted.substr(quadtrant*1, quadtrant)) * seeds[1] +
+		asciiify(sorted.substr(quadtrant*2, quadtrant)) * seeds[2] +
+		asciiify(sorted.substr(quadtrant*3, len)) * seeds[3];
 
 	int result = hash_sum % nextPrime;
 
