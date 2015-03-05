@@ -265,8 +265,8 @@ int main(int argc, char **argv) {
 	auto verbose = args.find("--verbose") != args.end();
 	auto inputFile = args.find("inputFile");
 	if (countAnagrams != args.end()) {
-		cout << countAnagrams << " anagrams" << endl;
 		long countAnagrams = d.countAnagrams(verbose);
+		cerr << countAnagrams << " anagrams" << endl;
 	}
 	else if (word != args.end()) {
 		auto matches = d.findAnagrams(word->second);
